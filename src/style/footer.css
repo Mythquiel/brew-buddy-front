@@ -1,0 +1,13 @@
+.footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.0em 1.5em;
+}
+
+.language-switcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}

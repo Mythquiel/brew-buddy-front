@@ -1,8 +1,11 @@
 import brewBuddyIcon from '../assets/brew_buddy_cup.svg'
 import { NavLink } from "react-router-dom"
 import "../style/nav.css"
+import {useTranslation} from "react-i18next";
 
 export default function Nav() {
+  const { t } = useTranslation("nav");
+
   return (
     <nav className="nav">
       <div className="nav-left">
@@ -11,9 +14,9 @@ export default function Nav() {
       </div>
 
       <ul className="menu">
-        <li><NavLink to="/drinks">List Drinks</NavLink></li>
-        <li><NavLink to="/stats">Statistics</NavLink></li>
-        <li><NavLink to="/contact">Contact</NavLink></li>
+        <li><NavLink to="/drinks">{t("beverages")}</NavLink></li>
+        <li><NavLink to="/stats">{t("stats")}</NavLink></li>
+        <li><NavLink to="/contact">{t("contact")}</NavLink></li>
       </ul>
     </nav>
   )
