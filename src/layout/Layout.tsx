@@ -1,15 +1,14 @@
-import { PropsWithChildren } from "react";
+import { Outlet } from "react-router-dom";
 import "../style/layout.css";
 import Nav from "../layout/Nav";
 
-export function Layout({ children }: PropsWithChildren) {
+export function Layout() {
   return (
     <>
-      <a href="#content" className="skiplink">Skip to content</a>
       <Nav />
       <div className="app-shell">
         <main id="content" className="container" role="main" aria-label="Main content">
-          {children}
+          <Outlet />
         </main>
         <footer className="footer">
           <div className="container">© {new Date().getFullYear()} BrewBuddy</div>
