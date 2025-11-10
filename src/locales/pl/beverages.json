@@ -1,0 +1,23 @@
+{
+  "filters": {
+    "aria": "Filtry",
+    "type": "Typ",
+    "anyType": "Dowolny typ",
+    "tags": "Tagi",
+    "tagsPlaceholder": "Wpisz tag i naciśnij Enter",
+    "removeTag": "Usuń {{tag}}",
+    "search": "Szukaj",
+    "searchPlaceholder": "Szukaj po nazwie, typie lub tagu"
+  },
+  "loading": "Wczytywanie napojów…",
+  "error": {
+    "title": "Nie udało się wczytać napojów."
+  },
+  "empty": {
+    "title": "Brak napojów.",
+    "hint": "Spróbuj zmienić filtry."
+  },
+  "list": {
+    "aria": "Lista napojów"
+  }
+}

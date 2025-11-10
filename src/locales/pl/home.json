@@ -1,0 +1,15 @@
+{
+  "welcomeMessage": "Zaparzmy coś",
+  "login": {
+    "open": "Logowanie",
+    "title": "Logowanie",
+    "username": "Użytkownik",
+    "password": "Hasło",
+    "showPassword": "Pokaż hasło",
+    "hidePassword": "Ukryj hasło",
+    "cancel": "Anuluj",
+    "submit": "Zaloguj się",
+    "submitting": "Logowanie",
+    "close": "Zamknij"
+  }
+}

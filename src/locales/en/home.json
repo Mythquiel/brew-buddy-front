@@ -1,0 +1,16 @@
+{
+  "welcomeMessage": "Let's get brewing",
+  "login": {
+    "open": "Login",
+    "title": "Login",
+    "description": "Sign in to continue",
+    "username": "Username",
+    "password": "Password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "cancel": "Cancel",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "close": "Close"
+  }
+}

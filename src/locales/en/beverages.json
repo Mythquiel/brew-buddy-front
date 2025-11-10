@@ -1,0 +1,23 @@
+{
+  "filters": {
+    "aria": "Filters",
+    "type": "Type",
+    "anyType": "Any type",
+    "tags": "Tags",
+    "tagsPlaceholder": "Type a tag and press Enter",
+    "removeTag": "Remove {{tag}}",
+    "search": "Search",
+    "searchPlaceholder": "Search by name, type or tag"
+  },
+  "loading": "Loading beverages…",
+  "error": {
+    "title": "Could not load beverages."
+  },
+  "empty": {
+    "title": "No beverages found.",
+    "hint": "Try adjusting filters."
+  },
+  "list": {
+    "aria": "Beverages list"
+  }
+}
