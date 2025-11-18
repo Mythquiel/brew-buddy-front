@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
+    "i18next": "^25.6.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-i18next": "^16.2.4",
     "react-router-dom": "^7.9.4"
   },
   "devDependencies": {

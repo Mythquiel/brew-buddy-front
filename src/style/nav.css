@@ -2,9 +2,16 @@
   display:flex; align-items:center; justify-content:space-between;
   background:#1B4332; color:#D8F3DC; padding:.5rem 1.5rem; height:64px; box-shadow:0 2px 6px rgba(0,0,0,.15); }
 .nav-left { display:flex; align-items:center; gap:.25rem; }
-.nav .logo { width:50px; height:50px; } /* overrides base .logo size just for nav */
+.nav .logo { width:50px; height:50px; }
 .nav .title { font-size:1.25rem; font-weight:600; color:#fff; }
 .nav .menu { display:flex; list-style:none; gap:1.5rem; margin-right:2rem; padding:0; }
 .nav .menu a { color:#D8F3DC; text-decoration:none; font-weight:500; transition:color .2s; }
 .nav .menu a:hover { color:#95D5B2; }
 .nav .menu a.active { color:#95D5B2; border-bottom:2px solid #95D5B2; padding-bottom:2px; }
+
+a,
+a:hover,
+a:focus,
+a:active {
+    cursor: pointer;
+}

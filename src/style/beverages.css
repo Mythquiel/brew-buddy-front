@@ -1,0 +1,204 @@
+.beverages-page {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1rem 1.25rem 2rem;
+}
+
+.beverages-header {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.beverages-header h1 {
+  margin: 0;
+}
+.beverages-header .subtitle {
+  margin: 0;
+  color: #b8c1cc;
+  font-size: .95rem;
+}
+
+/* Filters */
+.filters { margin-top: .25rem; }
+.filters-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .5rem;
+}
+
+.filter { display: grid; gap: .25rem; }
+.filter-label { font-size: .9rem; color: #a9b6c3; }
+
+.filter select,
+.filter input[type="text"],
+.filter input[type="search"] {
+  width: 100%;
+  padding: .55rem .75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(216, 243, 220, 0.18);
+  background: rgba(0,0,0,.25);
+  color: #e6f6ef;
+}
+
+.tags-filter .tags-input {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .35rem;
+  padding: .35rem;
+  border: 1px dashed rgba(216, 243, 220, 0.18);
+  border-radius: 10px;
+  background: rgba(0,0,0,.15);
+}
+.tags-filter .tags-input input {
+  flex: 1 1 160px;
+  min-width: 120px;
+  border: none;
+  background: transparent;
+  padding: .35rem .4rem;
+  outline: none;
+  color: #e6f6ef;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: .35rem; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  background: rgba(216, 243, 220, 0.1);
+  border: 1px solid rgba(216, 243, 220, 0.25);
+  color: #e6f6ef;
+  padding: .2rem .5rem .2rem .6rem;
+  border-radius: 999px;
+  font-size: .8rem;
+}
+.chip-remove {
+  background: transparent;
+  border: none;
+  color: #e6f6ef;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 .25rem;
+  cursor: pointer;
+}
+
+.search-filter input[type="search"] { appearance: none; }
+
+@media (min-width: 640px) {
+  .filters-row {
+    grid-template-columns: 1.3fr 160px 1.5fr;
+    align-items: end;
+  }
+}
+
+/* States */
+.state {
+  background: rgba(216, 243, 220, 0.04);
+  border: 1px solid rgba(216, 243, 220, 0.1);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+.state-error {
+  border-color: rgba(255, 99, 132, 0.35);
+  background: rgba(255, 99, 132, 0.06);
+}
+.state-empty {
+  opacity: .9;
+}
+.error-message {
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: .9rem;
+  margin: .5rem 0 0;
+  color: #ffb3c1;
+}
+
+/* Grid */
+.beverages-grid {
+  --min-card-size: 220px;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--min-card-size), 1fr));
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+.beverage-card {
+  background: rgba(216, 243, 220, 0.04);
+  border: 1px solid rgba(216, 243, 220, 0.1);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.beverage-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  border-color: rgba(216, 243, 220, 0.22);
+}
+
+.beverage-card .thumb {
+  aspect-ratio: 16/9;
+  background: linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,.08));
+  display: grid;
+  place-items: center;
+}
+.beverage-card .thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.beverage-card .thumb .placeholder {
+  font-size: 2rem;
+  opacity: .8;
+}
+
+.beverage-card .content {
+  padding: .85rem 1rem 1rem;
+  display: grid;
+  gap: .35rem;
+}
+.beverage-card .name {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.beverage-card .type {
+  font-size: .85rem;
+  color: #a9b6c3;
+}
+.beverage-card .desc {
+  margin: .25rem 0 0;
+  color: #cbd5e1;
+  font-size: .95rem;
+}
+
+/* Responsive tweaks */
+@media (min-width: 480px) {
+  .beverages-page { padding: 1rem 1.5rem 2.25rem; }
+  .beverages-grid { gap: 1.1rem; }
+}
+@media (min-width: 768px) {
+  .beverages-page { padding: 1.25rem 2rem 2.5rem; }
+  .beverages-grid { gap: 1.25rem; }
+}
+
+/* Tags styling */
+.beverage-card .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin-top: .25rem;
+}
+.beverage-card .tag {
+  background: rgba(216, 243, 220, 0.08);
+  border: 1px solid rgba(216, 243, 220, 0.25);
+  color: #e6f6ef;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  font-size: .8rem;
+  line-height: 1.1;
+  white-space: nowrap;
+}
