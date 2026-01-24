@@ -1,0 +1,113 @@
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+  z-index: 2000;
+}
+
+.modalDialog {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-bg-darker);
+  color: var(--color-neutral-warm);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-xs) var(--spacing-md);
+}
+
+.modalDescription {
+  margin: 0 var(--spacing-md) var(--spacing-sm) var(--spacing-md);
+  opacity: 0.85;
+  font-size: 0.95rem;
+}
+
+.modalForm {
+  padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md) var(--spacing-md);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.formLabel {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+}
+
+.formLabel input {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--color-neutral-warm);
+}
+
+.passwordField {
+  position: relative;
+  display: flex;
+}
+
+.passwordField input {
+  flex: 1 1 auto;
+  padding-right: 2.4rem;
+}
+
+.iconButton {
+  background: transparent;
+  border: none;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  color: var(--color-neutral-warm);
+  cursor: pointer;
+}
+
+.toggle {
+  position: absolute;
+  right: 0.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: var(--radius-sm);
+}
+
+.close {
+  font-size: 1.25rem;
+  line-height: 1;
+  border-radius: var(--radius-md);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.primary {
+  background-color: rgba(27, 67, 50, 0.9);
+  color: #82a584;
+  border: none;
+  padding: 0.6rem var(--spacing-md);
+  border-radius: var(--radius-md);
+}
+
+.primary:disabled {
+  opacity: 0.7;
+}
+
+.secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-neutral-warm);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.6rem var(--spacing-md);
+  border-radius: var(--radius-md);
+}

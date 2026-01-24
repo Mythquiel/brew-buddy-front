@@ -1,0 +1,31 @@
+.footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em var(--spacing-lg);
+  background-color: var(--color-green-dark);
+  border-top: 1px solid rgba(216, 243, 220, 0.15);
+  color: var(--color-green-lightest);
+  min-height: 60px;
+}
+
+.languageSwitcher {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.languageSwitcher button {
+  background: rgba(216, 243, 220, 0.1);
+  border: 1px solid rgba(216, 243, 220, 0.2);
+  color: var(--color-green-lightest);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition-normal);
+}
+
+.languageSwitcher button:hover {
+  background: rgba(216, 243, 220, 0.2);
+}

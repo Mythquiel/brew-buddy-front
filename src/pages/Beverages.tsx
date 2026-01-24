@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useState} from "react";
-import "../style/beverages.css";
+import styles from "../style/beverages.module.css";
 import {useTranslation} from "react-i18next";
 
 interface Beverage {
@@ -123,13 +123,13 @@ export default function Beverages() {
     };
 
     return (
-        <div className="beverages-page">
-            <header className="beverages-header">
-                <form className="filters" onSubmit={(e) => e.preventDefault()}
+        <div className={styles.beveragesPage}>
+            <header className={styles.beveragesHeader}>
+                <form className={styles.filters} onSubmit={(e) => e.preventDefault()}
                       aria-label={t("filters.aria", "Filters")}>
-                    <div className="filters-row">
-                        <label className="filter search-filter">
-                            <span className="filter-label">{t("filters.search", "Search")}</span>
+                    <div className={styles.filtersRow}>
+                        <label className={`${styles.filter} ${styles.searchFilter}`}>
+                            <span className={styles.filterLabel}>{t("filters.search", "Search")}</span>
                             <input
                                 type="search"
                                 placeholder={t("filters.searchPlaceholder", "Search by name, type or tag")}
@@ -138,8 +138,8 @@ export default function Beverages() {
                                 aria-label={t("filters.search", "Search")}
                             />
                         </label>
-                        <label className="filter">
-                            <span className="filter-label">{t("filters.type", "Type")}</span>
+                        <label className={styles.filter}>
+                            <span className={styles.filterLabel}>{t("filters.type", "Type")}</span>
                             <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}
                                     aria-label={t("filters.type", "Type")}>
                                 <option value="">{t("filters.anyType", "Any type")}</option>
@@ -148,14 +148,14 @@ export default function Beverages() {
                                 ))}
                             </select>
                         </label>
-                        <label className="filter tags-filter">
-                            <span className="filter-label">{t("filters.tags", "Tags")}</span>
-                            <div className="tags-input">
-                                <div className="chips">
+                        <label className={`${styles.filter} ${styles.tagsFilter}`}>
+                            <span className={styles.filterLabel}>{t("filters.tags", "Tags")}</span>
+                            <div className={styles.tagsInput}>
+                                <div className={styles.chips}>
                                     {selectedTags.map((tag) => (
-                                        <span className="chip" key={tag}>
+                                        <span className={styles.chip} key={tag}>
                       {tag}
-                                            <button type="button" className="chip-remove"
+                                            <button type="button" className={styles.chipRemove}
                                                     aria-label={t("filters.removeTag", {
                                                         defaultValue: "Remove {{tag}}",
                                                         tag
@@ -183,45 +183,45 @@ export default function Beverages() {
             </header>
 
             {loading && (
-                <div className="state state-loading" role="status" aria-live="polite">
+                <div className={`${styles.state} ${styles.stateLoading}`} role="status" aria-live="polite">
                     {t("loading", "Loading beverages…")}
                 </div>
             )}
 
             {!loading && error && (
-                <div className="state state-error" role="alert">
+                <div className={`${styles.state} ${styles.stateError}`} role="alert">
                     <p>{t("error.title", "Could not load beverages.")}</p>
-                    <pre className="error-message">{error}</pre>
+                    <pre className={styles.errorMessage}>{error}</pre>
                 </div>
             )}
 
             {!loading && !error && filteredDrinks.length === 0 && (
-                <div className="state state-empty">
+                <div className={`${styles.state} ${styles.stateEmpty}`}>
                     <p>{t("empty.title", "No beverages found.")}</p>
-                    <p className="hint">{t("empty.hint", "Try adjusting filters or add drinks in your backend.")}</p>
+                    <p className={styles.hint}>{t("empty.hint", "Try adjusting filters or add drinks in your backend.")}</p>
                 </div>
             )}
 
             {!loading && !error && filteredDrinks.length > 0 && (
-                <ul className="beverages-grid" aria-label={t("list.aria", "Beverages list")}>
+                <ul className={styles.beveragesGrid} aria-label={t("list.aria", "Beverages list")}>
                     {filteredDrinks.map((b) => (
-                        <li key={b.id} className="beverage-card">
-                            <div className="thumb" aria-hidden>
+                        <li key={b.id} className={styles.beverageCard}>
+                            <div className={styles.thumb} aria-hidden>
                                 {b.imageUrl ? (
                                     <img src={b.imageUrl} alt=""/>
                                 ) : (
-                                    <div className="placeholder" aria-hidden>
+                                    <div className={styles.placeholder} aria-hidden>
                                         <span role="img" aria-label="drink">🍵</span>
                                     </div>
                                 )}
                             </div>
-                            <div className="content">
-                                <h3 className="name">{b.name}</h3>
-                                {b.type && <div className="type">{b.type}</div>}
+                            <div className={styles.content}>
+                                <h3 className={styles.name}>{b.name}</h3>
+                                {b.type && <div className={styles.type}>{b.type}</div>}
                                 {b.tags && b.tags.length > 0 && (
-                                    <div className="tags" aria-label="Tags">
+                                    <div className={styles.tags} aria-label="Tags">
                                         {b.tags.map((tag) => (
-                                            <span className="tag" key={tag}>{tag}</span>
+                                            <span className={styles.tag} key={tag}>{tag}</span>
                                         ))}
                                     </div>
                                 )}

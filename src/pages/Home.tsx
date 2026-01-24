@@ -1,6 +1,6 @@
 import brewBuddyLogo from "../assets/brew_buddy_logo.svg";
 import {useNavigate} from "react-router-dom";
-import "../style/home.css";
+import styles from "../style/home.module.css";
 import {useTranslation} from "react-i18next";
 import { useLoginModal } from "../auth/LoginModalContext";
 
@@ -19,14 +19,14 @@ export default function Home() {
 
     return (
         <>
-            <div className="login-button-container">
-                <button type="button" className="login-button" onClick={openLogin}>
+            <div className={styles.loginButtonContainer}>
+                <button type="button" className={styles.loginButton} onClick={openLogin}>
                     {t("login.open")}
                 </button>
             </div>
-            <div className="home-page">
-                <img src={brewBuddyLogo} className="logo brew-buddy" alt="Brew Buddy logo"/>
-                <button type="button" className="home-button" onClick={goToDrinks}>
+            <div className={styles.homePage}>
+                <img src={brewBuddyLogo} className={`${styles.logo} ${styles.brewBuddy}`} alt="Brew Buddy logo"/>
+                <button type="button" className={styles.homeButton} onClick={goToDrinks}>
                     {t("welcomeMessage")} 🍵
                 </button>
             </div>

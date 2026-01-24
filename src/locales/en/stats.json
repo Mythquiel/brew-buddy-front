@@ -1,3 +1,23 @@
 {
-
+  "title": "Statistics",
+  "subtitle": "Overview of beverage data",
+  "loading": "Loading statistics…",
+  "error": {
+    "title": "Could not load statistics."
+  },
+  "empty": {
+    "title": "No data available.",
+    "hint": "Add beverages to see statistics."
+  },
+  "overview": {
+    "totalBeverages": "Total Beverages",
+    "types": "Types",
+    "uniqueTags": "Unique Tags"
+  },
+  "typeDistribution": {
+    "title": "Distribution by Type"
+  },
+  "tagFrequency": {
+    "title": "Most Common Tags"
+  }
 }

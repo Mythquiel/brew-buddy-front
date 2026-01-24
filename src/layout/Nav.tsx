@@ -1,6 +1,6 @@
 import brewBuddyIcon from '../assets/brew_buddy_cup.svg'
 import {NavLink} from "react-router-dom"
-import "../style/nav.css"
+import styles from "../style/nav.module.css"
 import {useTranslation} from "react-i18next";
 import { useLoginModal } from "../auth/LoginModalContext";
 
@@ -9,13 +9,13 @@ export default function Nav() {
     const { open } = useLoginModal();
 
     return (
-        <nav className="nav">
-            <div className="nav-left">
-                <img src={brewBuddyIcon} alt="Brew Buddy icon" className="logo"/>
-                <h1 className="title">Brew Buddy</h1>
+        <nav className={styles.nav}>
+            <div className={styles.navLeft}>
+                <img src={brewBuddyIcon} alt="Brew Buddy icon" className={styles.logo}/>
+                <h1 className={styles.title}>Brew Buddy</h1>
             </div>
 
-            <ul className="menu">
+            <ul className={styles.menu}>
                 <li><NavLink to="/drinks">{t("beverages")}</NavLink></li>
                 <li><NavLink to="/stats">{t("stats")}</NavLink></li>
                 <li><NavLink to="/contact">{t("contact")}</NavLink></li>

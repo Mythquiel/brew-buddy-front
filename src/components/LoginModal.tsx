@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import { createPortal } from "react-dom";
-import "../style/modal.css";
+import styles from "../style/modal.module.css";
 import { useTranslation } from "react-i18next";
 
 export type LoginCredentials = {
@@ -65,16 +65,16 @@ export default function LoginModal({ isOpen, onClose, onSubmit }: LoginModalProp
   if (!isOpen) return null;
 
   const modalContent = (
-    <div className="modal-overlay" onClick={handleBackdropClick}>
-      <div className="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="login-title" aria-describedby="login-desc">
-        <div className="modal-header">
+    <div className={styles.modalOverlay} onClick={handleBackdropClick}>
+      <div className={styles.modalDialog} role="dialog" aria-modal="true" aria-labelledby="login-title" aria-describedby="login-desc">
+        <div className={styles.modalHeader}>
           <h2 id="login-title">{t("login.title", "Login")}</h2>
-          <button type="button" className="icon-button close" aria-label={t("login.close", "Close")} onClick={onClose}>
+          <button type="button" className={`${styles.iconButton} ${styles.close}`} aria-label={t("login.close", "Close")} onClick={onClose}>
             ×
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="modal-form">
-          <label className="form-label">
+        <form onSubmit={handleSubmit} className={styles.modalForm}>
+          <label className={styles.formLabel}>
             {t("login.username", "Username")}
             <input
               ref={usernameRef}
@@ -85,9 +85,9 @@ export default function LoginModal({ isOpen, onClose, onSubmit }: LoginModalProp
               required
             />
           </label>
-          <label className="form-label">
+          <label className={styles.formLabel}>
             {t("login.password", "Password")}
-            <div className="password-field">
+            <div className={styles.passwordField}>
               <input
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
@@ -97,7 +97,7 @@ export default function LoginModal({ isOpen, onClose, onSubmit }: LoginModalProp
               />
               <button
                 type="button"
-                className="icon-button toggle"
+                className={`${styles.iconButton} ${styles.toggle}`}
                 aria-pressed={showPassword}
                 onClick={() => setShowPassword((v) => !v)}
                 aria-label={showPassword ? t("login.hidePassword", "Hide password") : t("login.showPassword", "Show password")}
@@ -107,11 +107,11 @@ export default function LoginModal({ isOpen, onClose, onSubmit }: LoginModalProp
             </div>
           </label>
 
-          <div className="modal-actions">
-            <button type="button" className="secondary" onClick={onClose} disabled={submitting}>
+          <div className={styles.modalActions}>
+            <button type="button" className={styles.secondary} onClick={onClose} disabled={submitting}>
               {t("login.cancel", "Cancel")}
             </button>
-            <button type="submit" className="primary" disabled={submitting}>
+            <button type="submit" className={styles.primary} disabled={submitting}>
               {submitting ? t("login.submitting", "Signing in…") : t("login.submit", "Sign in")}
             </button>
           </div>

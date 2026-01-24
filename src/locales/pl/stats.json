@@ -1,3 +1,23 @@
 {
-
+  "title": "Statystyki",
+  "subtitle": "Przegląd danych o napojach",
+  "loading": "Ładowanie statystyk…",
+  "error": {
+    "title": "Nie udało się załadować statystyk."
+  },
+  "empty": {
+    "title": "Brak dostępnych danych.",
+    "hint": "Dodaj napoje, aby zobaczyć statystyki."
+  },
+  "overview": {
+    "totalBeverages": "Wszystkie Napoje",
+    "types": "Typy",
+    "uniqueTags": "Unikalne Tagi"
+  },
+  "typeDistribution": {
+    "title": "Rozkład według typu"
+  },
+  "tagFrequency": {
+    "title": "Najczęstsze tagi"
+  }
 }
