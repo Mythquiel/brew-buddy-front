@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useState} from "react";
-import "../style/beverages.css";
+import styles from "../style/beverages.module.css";
 import {useTranslation} from "react-i18next";
 
 interface Beverage {
@@ -9,8 +9,13 @@ interface Beverage {
     brand?: string;
     brewTimeMinSec?: number;
     brewTimeMaxSec?: number;
+    imageUrl?: string;
     createdAt?: string;
     updatedAt?: string;
+}
+
+interface BeverageWithSignedUrl extends Beverage {
+    signedImageUrl?: string;
 }
 
 interface BeveragePageResponse {
@@ -35,12 +40,39 @@ function useApiBaseUrl() {
 export default function Beverages() {
     const {t} = useTranslation("beverages");
     const baseUrl = useApiBaseUrl();
-    const [drinks, setDrinks] = useState<Beverage[]>([]);
+    const [drinks, setDrinks] = useState<BeverageWithSignedUrl[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [typeFilter, setTypeFilter] = useState<string>("");
     const [searchText, setSearchText] = useState<string>("");
     const [brandFilter, setBrandFilter] = useState<string>("");
+    const [selectedBeverage, setSelectedBeverage] = useState<BeverageWithSignedUrl | null>(null);
+
+    const handleImageError = async (beverageId: string, event: React.SyntheticEvent<HTMLImageElement>) => {
+        const img = event.currentTarget;
+
+        if (img.dataset.retryCount && parseInt(img.dataset.retryCount) > 2) {
+            console.error(`Failed to load image after retries for beverage ${beverageId}`);
+            return;
+        }
+
+        try {
+            const response = await fetch(`${baseUrl}/api/v1/beverages/${beverageId}/image-url`);
+            if (response.ok) {
+                const newSignedUrl = await response.text();
+                setDrinks(prevDrinks =>
+                    prevDrinks.map(drink =>
+                        drink.id === beverageId
+                            ? { ...drink, signedImageUrl: newSignedUrl }
+                            : drink
+                    )
+                );
+                img.dataset.retryCount = String((parseInt(img.dataset.retryCount || '0') + 1));
+            }
+        } catch (err) {
+            console.error(`Failed to refresh signed URL for ${beverageId}:`, err);
+        }
+    };
 
     useEffect(() => {
         async function load() {
@@ -49,9 +81,7 @@ export default function Beverages() {
 
             try {
                 const params = new URLSearchParams();
-                if (typeFilter) params.append("type", typeFilter);
-                if (searchText) params.append("nameContains", searchText);
-                params.append("size", "100");
+                params.append("size", "1000");
 
                 const url = `${baseUrl}/api/v1/beverages?${params.toString()}`;
                 const response = await fetch(url);
@@ -61,7 +91,27 @@ export default function Beverages() {
                 }
 
                 const data: BeveragePageResponse = await response.json();
-                setDrinks(data.content);
+
+                const beveragesWithImages = await Promise.all(
+                    data.content.map(async (beverage) => {
+                        if (beverage.imageUrl) {
+                            try {
+                                const imageResponse = await fetch(
+                                    `${baseUrl}/api/v1/beverages/${beverage.id}/image-url`
+                                );
+                                if (imageResponse.ok) {
+                                    const signedUrl = await imageResponse.text();
+                                    return { ...beverage, signedImageUrl: signedUrl };
+                                }
+                            } catch (err) {
+                                console.error(`Failed to fetch image for ${beverage.name}:`, err);
+                            }
+                        }
+                        return beverage;
+                    })
+                );
+
+                setDrinks(beveragesWithImages);
             } catch (err) {
                 setError(err instanceof Error ? err.message : String(err));
                 setDrinks([]);
@@ -71,31 +121,50 @@ export default function Beverages() {
         }
 
         load();
-    }, [baseUrl, typeFilter, searchText]);
+    }, [baseUrl]);
 
     const allTypes = ["TEA", "COFFEE", "OTHER"];
 
     const allBrands = useMemo(() => {
         const set = new Set<string>();
-        drinks.forEach((d) => d.brand && set.add(d.brand));
+        drinks.forEach((d) => {
+            if (typeFilter && d.type !== typeFilter) return;
+            if (d.brand) set.add(d.brand);
+        });
         return Array.from(set).sort((a, b) => a.localeCompare(b));
-    }, [drinks]);
+    }, [drinks, typeFilter]);
+
+    useEffect(() => {
+        if (brandFilter && !allBrands.includes(brandFilter)) {
+            setBrandFilter("");
+        }
+    }, [allBrands, brandFilter]);
 
     const filteredDrinks = useMemo(() => {
         return drinks.filter((d) => {
+            if (typeFilter && d.type !== typeFilter) return false;
+
             if (brandFilter && d.brand !== brandFilter) return false;
+
+            if (searchText) {
+                const search = searchText.toLowerCase();
+                const nameMatch = d.name.toLowerCase().includes(search);
+                const brandMatch = d.brand?.toLowerCase().includes(search);
+                if (!nameMatch && !brandMatch) return false;
+            }
+
             return true;
         });
-    }, [drinks, brandFilter]);
+    }, [drinks, typeFilter, brandFilter, searchText]);
 
     return (
-        <div className="beverages-page">
-            <header className="beverages-header">
-                <form className="filters" onSubmit={(e) => e.preventDefault()}
+        <div className={styles.beveragesPage}>
+            <header className={styles.beveragesHeader}>
+                <form className={styles.filters} onSubmit={(e) => e.preventDefault()}
                       aria-label={t("filters.aria", "Filters")}>
-                    <div className="filters-row">
-                        <label className="filter search-filter">
-                            <span className="filter-label">{t("filters.search", "Search")}</span>
+                    <div className={styles.filtersRow}>
+                        <label className={`${styles.filter} ${styles.searchFilter}`}>
+                            <span className={styles.filterLabel}>{t("filters.search", "Search")}</span>
                             <input
                                 type="search"
                                 placeholder={t("filters.searchPlaceholder", "Search by name")}
@@ -104,18 +173,18 @@ export default function Beverages() {
                                 aria-label={t("filters.search", "Search")}
                             />
                         </label>
-                        <label className="filter">
-                            <span className="filter-label">{t("filters.type", "Type")}</span>
+                        <label className={styles.filter}>
+                            <span className={styles.filterLabel}>{t("filters.type", "Type")}</span>
                             <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}
                                     aria-label={t("filters.type", "Type")}>
                                 <option value="">{t("filters.anyType", "Any type")}</option>
                                 {allTypes.map((tVal) => (
-                                    <option key={tVal} value={tVal}>{tVal}</option>
+                                    <option key={tVal} value={tVal}>{t(`types.${tVal}`, tVal)}</option>
                                 ))}
                             </select>
                         </label>
-                        <label className="filter">
-                            <span className="filter-label">{t("filters.brand", "Brand")}</span>
+                        <label className={styles.filter}>
+                            <span className={styles.filterLabel}>{t("filters.brand", "Brand")}</span>
                             <select value={brandFilter} onChange={(e) => setBrandFilter(e.target.value)}
                                     aria-label={t("filters.brand", "Brand")}>
                                 <option value="">{t("filters.anyBrand", "Any brand")}</option>
@@ -129,55 +198,135 @@ export default function Beverages() {
             </header>
 
             {loading && (
-                <div className="state state-loading" role="status" aria-live="polite">
+                <div className={styles.state} role="status" aria-live="polite">
                     {t("loading", "Loading beverages…")}
                 </div>
             )}
 
             {!loading && error && (
-                <div className="state state-error" role="alert">
+                <div className={`${styles.state} ${styles.stateError}`} role="alert">
                     <p>{t("error.title", "Could not load beverages.")}</p>
-                    <pre className="error-message">{error}</pre>
+                    <pre className={styles.errorMessage}>{error}</pre>
                 </div>
             )}
 
             {!loading && !error && filteredDrinks.length === 0 && (
-                <div className="state state-empty">
+                <div className={`${styles.state} ${styles.stateEmpty}`}>
                     <p>{t("empty.title", "No beverages found.")}</p>
                     <p className="hint">{t("empty.hint", "Try adjusting filters or add drinks in your backend.")}</p>
                 </div>
             )}
 
             {!loading && !error && filteredDrinks.length > 0 && (
-                <ul className="beverages-grid" aria-label={t("list.aria", "Beverages list")}>
+                <ul className={styles.beveragesGrid} aria-label={t("list.aria", "Beverages list")}>
                     {filteredDrinks.map((b) => (
-                        <li key={b.id} className="beverage-card">
-                            <div className="thumb" aria-hidden>
-                                <div className="placeholder" aria-hidden>
-                                    <span role="img" aria-label="drink">
-                                        {b.type === "COFFEE" ? "☕" : b.type === "TEA" ? "🍵" : "🥤"}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="content">
-                                <h3 className="name">{b.name}</h3>
-                                {b.type && <div className="type">{b.type}</div>}
-                                {b.brand && <div className="brand">{t("card.brand", "Brand")}: {b.brand}</div>}
-                                {(b.brewTimeMinSec !== undefined || b.brewTimeMaxSec !== undefined) && (
-                                    <div className="brew-time">
-                                        {t("card.brewTime", "Brew time")}:
-                                        {b.brewTimeMinSec !== undefined && b.brewTimeMaxSec !== undefined
-                                            ? ` ${Math.floor(b.brewTimeMinSec / 60)}:${(b.brewTimeMinSec % 60).toString().padStart(2, '0')} - ${Math.floor(b.brewTimeMaxSec / 60)}:${(b.brewTimeMaxSec % 60).toString().padStart(2, '0')}`
-                                            : b.brewTimeMinSec !== undefined
-                                            ? ` ${Math.floor(b.brewTimeMinSec / 60)}:${(b.brewTimeMinSec % 60).toString().padStart(2, '0')}`
-                                            : ` ${Math.floor(b.brewTimeMaxSec! / 60)}:${(b.brewTimeMaxSec! % 60).toString().padStart(2, '0')}`
-                                        }
+                        <li
+                            key={b.id}
+                            className={styles.beverageCard}
+                            onClick={() => setSelectedBeverage(b)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    setSelectedBeverage(b);
+                                }
+                            }}
+                        >
+                            <div className={styles.thumb} aria-hidden>
+                                {b.signedImageUrl ? (
+                                    <img
+                                        src={b.signedImageUrl}
+                                        alt={b.name}
+                                        loading="lazy"
+                                        onError={(e) => handleImageError(b.id, e)}
+                                    />
+                                ) : (
+                                    <div className={styles.placeholder} aria-hidden>
+                                        <span role="img" aria-label="drink">
+                                            {b.type === "COFFEE" ? "☕" : b.type === "TEA" ? "🍵" : "🥤"}
+                                        </span>
                                     </div>
                                 )}
+                            </div>
+                            <div className={styles.content}>
+                                <h3 className={styles.name}>{b.name}</h3>
+                                {b.type && <div className={styles.type}>{t(`types.${b.type}`, b.type)}</div>}
                             </div>
                         </li>
                     ))}
                 </ul>
+            )}
+
+            {selectedBeverage && (
+                <div
+                    className={styles.modalOverlay}
+                    onClick={() => setSelectedBeverage(null)}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="modal-title"
+                >
+                    <div
+                        className={styles.modalContent}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button
+                            className={styles.modalClose}
+                            onClick={() => setSelectedBeverage(null)}
+                            aria-label={t("modal.close", "Close")}
+                        >
+                            ×
+                        </button>
+
+                        {selectedBeverage.signedImageUrl ? (
+                            <div className={styles.modalImage}>
+                                <img
+                                    src={selectedBeverage.signedImageUrl}
+                                    alt={selectedBeverage.name}
+                                    onError={(e) => handleImageError(selectedBeverage.id, e)}
+                                />
+                            </div>
+                        ) : (
+                            <div className={styles.modalImagePlaceholder}>
+                                <span role="img" aria-label="drink">
+                                    {selectedBeverage.type === "COFFEE" ? "☕" : selectedBeverage.type === "TEA" ? "🍵" : "🥤"}
+                                </span>
+                            </div>
+                        )}
+
+                        <div className={styles.modalDetails}>
+                            <h2 id="modal-title" className={styles.modalName}>{selectedBeverage.name}</h2>
+
+                            {selectedBeverage.type && (
+                                <div className={styles.modalField}>
+                                    <span className={styles.modalLabel}>{t("modal.type", "Type")}:</span>
+                                    <span>{t(`types.${selectedBeverage.type}`, selectedBeverage.type)}</span>
+                                </div>
+                            )}
+
+                            {selectedBeverage.brand && (
+                                <div className={styles.modalField}>
+                                    <span className={styles.modalLabel}>{t("modal.brand", "Brand")}:</span>
+                                    <span>{selectedBeverage.brand}</span>
+                                </div>
+                            )}
+
+                            {(selectedBeverage.brewTimeMinSec !== undefined || selectedBeverage.brewTimeMaxSec !== undefined) && (
+                                <div className={styles.modalField}>
+                                    <span className={styles.modalLabel}>{t("modal.brewTime", "Brew time")}:</span>
+                                    <span>
+                                        {selectedBeverage.brewTimeMinSec !== undefined && selectedBeverage.brewTimeMaxSec !== undefined
+                                            ? `${Math.floor(selectedBeverage.brewTimeMinSec / 60)}:${(selectedBeverage.brewTimeMinSec % 60).toString().padStart(2, '0')} - ${Math.floor(selectedBeverage.brewTimeMaxSec / 60)}:${(selectedBeverage.brewTimeMaxSec % 60).toString().padStart(2, '0')}`
+                                            : selectedBeverage.brewTimeMinSec !== undefined
+                                            ? `${Math.floor(selectedBeverage.brewTimeMinSec / 60)}:${(selectedBeverage.brewTimeMinSec % 60).toString().padStart(2, '0')}`
+                                            : `${Math.floor(selectedBeverage.brewTimeMaxSec! / 60)}:${(selectedBeverage.brewTimeMaxSec! % 60).toString().padStart(2, '0')}`
+                                        }
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
