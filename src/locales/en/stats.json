@@ -1,3 +1,36 @@
 {
-
+  "title": "Beverage usage statistics",
+  "filters": {
+    "from": "From",
+    "to": "To"
+  },
+  "actions": {
+    "apply": "Apply",
+    "reset": "Reset",
+    "loading": "Loading..."
+  },
+  "table": {
+    "beverage": "Beverage",
+    "totalCount": "Total uses",
+    "firstUsedAt": "First used",
+    "lastUsedAt": "Last used"
+  },
+  "summary": {
+    "totalLabel": "Total uses (all beverages)"
+  },
+  "chart": {
+    "title": "Uses by beverage",
+    "noData": "No data to display",
+    "count": "{{count}}"
+  },
+  "empty": {
+    "noData": "No data for the selected range"
+  },
+  "errors": {
+    "failedToLoad": "Failed to load statistics",
+    "http": "Request failed (status {{code}})"
+  },
+  "note": {
+    "api": "Data source: backend endpoint /stats/beverages-usage (filtered by date range)"
+  }
 }

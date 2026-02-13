@@ -6,8 +6,19 @@ interface Beverage {
     id: string;
     type: string;
     name: string;
-    tags?: string[];
-    imageUrl?: string;
+    brand?: string;
+    brewTimeMinSec?: number;
+    brewTimeMaxSec?: number;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+interface BeveragePageResponse {
+    content: Beverage[];
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
 }
 
 function useApiBaseUrl() {
@@ -28,99 +39,54 @@ export default function Beverages() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [typeFilter, setTypeFilter] = useState<string>("");
-    const [tagInput, setTagInput] = useState<string>("");
-    const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [searchText, setSearchText] = useState<string>("");
-
-    const SAMPLE_BEVERAGES: Beverage[] = [
-        {
-            id: crypto.randomUUID(),
-            type: "Coffee",
-            name: "Espresso",
-            tags: ["Strong", "Hot", "Espresso"],
-            imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93",
-        },
-        {
-            id: crypto.randomUUID(),
-            type: "Tea",
-            name: "Green Tea",
-            tags: ["Green", "Hot"],
-            imageUrl: "https://images.unsplash.com/photo-1504196606672-aef5c9cefc92",
-        },
-        {
-            id: crypto.randomUUID(),
-            type: "Tea",
-            name: "Black Tea",
-            imageUrl: "https://images.unsplash.com/photo-1584270354949-1d3e7f9f0d3d",
-        },
-        {
-            id: crypto.randomUUID(),
-            name: "Lemonade",
-            type: "Juice",
-            imageUrl: "https://images.unsplash.com/photo-1551024709-8f23befc6cf7",
-        },
-    ];
+    const [brandFilter, setBrandFilter] = useState<string>("");
 
     useEffect(() => {
         async function load() {
-            setLoading(false);
+            setLoading(true);
             setError(null);
-            setDrinks(SAMPLE_BEVERAGES);
+
+            try {
+                const params = new URLSearchParams();
+                if (typeFilter) params.append("type", typeFilter);
+                if (searchText) params.append("nameContains", searchText);
+                params.append("size", "100");
+
+                const url = `${baseUrl}/api/v1/beverages?${params.toString()}`;
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data: BeveragePageResponse = await response.json();
+                setDrinks(data.content);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : String(err));
+                setDrinks([]);
+            } finally {
+                setLoading(false);
+            }
         }
 
         load();
-    }, [baseUrl]);
+    }, [baseUrl, typeFilter, searchText]);
 
-    const allTypes = useMemo(() => {
-        const set = new Set<string>();
-        drinks.forEach((d) => d.type && set.add(d.type));
-        return Array.from(set).sort((a, b) => a.localeCompare(b));
-    }, [drinks]);
+    const allTypes = ["TEA", "COFFEE", "OTHER"];
 
-    const allTags = useMemo(() => {
+    const allBrands = useMemo(() => {
         const set = new Set<string>();
-        drinks.forEach((d) => d.tags?.forEach((tag) => set.add(tag)));
+        drinks.forEach((d) => d.brand && set.add(d.brand));
         return Array.from(set).sort((a, b) => a.localeCompare(b));
     }, [drinks]);
 
     const filteredDrinks = useMemo(() => {
-        const q = searchText.trim().toLowerCase();
         return drinks.filter((d) => {
-            if (typeFilter && d.type !== typeFilter) return false;
-            if (selectedTags.length > 0) {
-                const tags = new Set((d.tags ?? []).map((t) => t.toLowerCase()));
-                for (const t of selectedTags) {
-                    if (!tags.has(t.toLowerCase())) return false;
-                }
-            }
-            if (q) {
-                const nameMatch = d.name.toLowerCase().includes(q);
-                const typeMatch = d.type.toLowerCase().includes(q);
-                const tagsMatch = (d.tags ?? []).some((t) => t.toLowerCase().includes(q));
-                return nameMatch || typeMatch || tagsMatch;
-            }
+            if (brandFilter && d.brand !== brandFilter) return false;
             return true;
         });
-    }, [drinks, typeFilter, selectedTags, searchText]);
-
-    const addTag = (raw: string) => {
-        const tag = raw.trim();
-        if (!tag) return;
-        if (!selectedTags.includes(tag)) setSelectedTags((prev) => [...prev, tag]);
-        setTagInput("");
-    };
-
-    //TODO fix removing tag as it removes all tags
-    const removeTag = (tag: string) => setSelectedTags((prev) => prev.filter((t) => t !== tag));
-
-    const onTagKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
-        if (e.key === "Enter" || e.key === ",") {
-            e.preventDefault();
-            addTag(tagInput);
-        } else if (e.key === "Backspace" && tagInput === "" && selectedTags.length > 0) {
-            removeTag(selectedTags[selectedTags.length - 1]);
-        }
-    };
+    }, [drinks, brandFilter]);
 
     return (
         <div className="beverages-page">
@@ -132,7 +98,7 @@ export default function Beverages() {
                             <span className="filter-label">{t("filters.search", "Search")}</span>
                             <input
                                 type="search"
-                                placeholder={t("filters.searchPlaceholder", "Search by name, type or tag")}
+                                placeholder={t("filters.searchPlaceholder", "Search by name")}
                                 value={searchText}
                                 onChange={(e) => setSearchText(e.target.value)}
                                 aria-label={t("filters.search", "Search")}
@@ -148,35 +114,15 @@ export default function Beverages() {
                                 ))}
                             </select>
                         </label>
-                        <label className="filter tags-filter">
-                            <span className="filter-label">{t("filters.tags", "Tags")}</span>
-                            <div className="tags-input">
-                                <div className="chips">
-                                    {selectedTags.map((tag) => (
-                                        <span className="chip" key={tag}>
-                      {tag}
-                                            <button type="button" className="chip-remove"
-                                                    aria-label={t("filters.removeTag", {
-                                                        defaultValue: "Remove {{tag}}",
-                                                        tag
-                                                    })} onClick={() => removeTag(tag)}>×</button>
-                    </span>
-                                    ))}
-                                </div>
-                                <input
-                                    list="all-tags"
-                                    type="text"
-                                    placeholder={t("filters.tagsPlaceholder", "Type a tag and press Enter")}
-                                    value={tagInput}
-                                    onChange={(e) => setTagInput(e.target.value)}
-                                    onKeyDown={onTagKeyDown}
-                                />
-                                <datalist id="all-tags">
-                                    {allTags.map((tag) => (
-                                        <option key={tag} value={tag}/>
-                                    ))}
-                                </datalist>
-                            </div>
+                        <label className="filter">
+                            <span className="filter-label">{t("filters.brand", "Brand")}</span>
+                            <select value={brandFilter} onChange={(e) => setBrandFilter(e.target.value)}
+                                    aria-label={t("filters.brand", "Brand")}>
+                                <option value="">{t("filters.anyBrand", "Any brand")}</option>
+                                {allBrands.map((brand) => (
+                                    <option key={brand} value={brand}>{brand}</option>
+                                ))}
+                            </select>
                         </label>
                     </div>
                 </form>
@@ -207,22 +153,25 @@ export default function Beverages() {
                     {filteredDrinks.map((b) => (
                         <li key={b.id} className="beverage-card">
                             <div className="thumb" aria-hidden>
-                                {b.imageUrl ? (
-                                    <img src={b.imageUrl} alt=""/>
-                                ) : (
-                                    <div className="placeholder" aria-hidden>
-                                        <span role="img" aria-label="drink">🍵</span>
-                                    </div>
-                                )}
+                                <div className="placeholder" aria-hidden>
+                                    <span role="img" aria-label="drink">
+                                        {b.type === "COFFEE" ? "☕" : b.type === "TEA" ? "🍵" : "🥤"}
+                                    </span>
+                                </div>
                             </div>
                             <div className="content">
                                 <h3 className="name">{b.name}</h3>
                                 {b.type && <div className="type">{b.type}</div>}
-                                {b.tags && b.tags.length > 0 && (
-                                    <div className="tags" aria-label="Tags">
-                                        {b.tags.map((tag) => (
-                                            <span className="tag" key={tag}>{tag}</span>
-                                        ))}
+                                {b.brand && <div className="brand">{t("card.brand", "Brand")}: {b.brand}</div>}
+                                {(b.brewTimeMinSec !== undefined || b.brewTimeMaxSec !== undefined) && (
+                                    <div className="brew-time">
+                                        {t("card.brewTime", "Brew time")}:
+                                        {b.brewTimeMinSec !== undefined && b.brewTimeMaxSec !== undefined
+                                            ? ` ${Math.floor(b.brewTimeMinSec / 60)}:${(b.brewTimeMinSec % 60).toString().padStart(2, '0')} - ${Math.floor(b.brewTimeMaxSec / 60)}:${(b.brewTimeMaxSec % 60).toString().padStart(2, '0')}`
+                                            : b.brewTimeMinSec !== undefined
+                                            ? ` ${Math.floor(b.brewTimeMinSec / 60)}:${(b.brewTimeMinSec % 60).toString().padStart(2, '0')}`
+                                            : ` ${Math.floor(b.brewTimeMaxSec! / 60)}:${(b.brewTimeMaxSec! % 60).toString().padStart(2, '0')}`
+                                        }
                                     </div>
                                 )}
                             </div>

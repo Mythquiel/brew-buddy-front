@@ -3,11 +3,10 @@
     "aria": "Filters",
     "type": "Type",
     "anyType": "Any type",
-    "tags": "Tags",
-    "tagsPlaceholder": "Type a tag and press Enter",
-    "removeTag": "Remove {{tag}}",
+    "brand": "Brand",
+    "anyBrand": "Any brand",
     "search": "Search",
-    "searchPlaceholder": "Search by name, type or tag"
+    "searchPlaceholder": "Search by name"
   },
   "loading": "Loading beverages…",
   "error": {
@@ -19,5 +18,9 @@
   },
   "list": {
     "aria": "Beverages list"
+  },
+  "card": {
+    "brand": "Brand",
+    "brewTime": "Brew time"
   }
 }

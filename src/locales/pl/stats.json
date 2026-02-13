@@ -1,3 +1,36 @@
 {
-
+  "title": "Statystyki użycia napojów",
+  "filters": {
+    "from": "Od",
+    "to": "Do"
+  },
+  "actions": {
+    "apply": "Zastosuj",
+    "reset": "Resetuj",
+    "loading": "Ładowanie..."
+  },
+  "table": {
+    "beverage": "Napój",
+    "totalCount": "Liczba użyć",
+    "firstUsedAt": "Pierwsze użycie",
+    "lastUsedAt": "Ostatnie użycie"
+  },
+  "summary": {
+    "totalLabel": "Łączna liczba użyć (wszystkie napoje)"
+  },
+  "chart": {
+    "title": "Liczba użyć wg napoju",
+    "noData": "Brak danych do wyświetlenia",
+    "count": "{{count}}"
+  },
+  "empty": {
+    "noData": "Brak danych dla wybranego zakresu"
+  },
+  "errors": {
+    "failedToLoad": "Nie udało się załadować statystyk",
+    "http": "Żądanie nie powiodło się (status {{code}})"
+  },
+  "note": {
+    "api": "Źródło danych: endpoint backendu /stats/beverages-usage (filtrowany zakresem dat)"
+  }
 }

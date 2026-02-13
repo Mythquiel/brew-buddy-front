@@ -3,11 +3,10 @@
     "aria": "Filtry",
     "type": "Typ",
     "anyType": "Dowolny typ",
-    "tags": "Tagi",
-    "tagsPlaceholder": "Wpisz tag i naciśnij Enter",
-    "removeTag": "Usuń {{tag}}",
+    "brand": "Marka",
+    "anyBrand": "Dowolna marka",
     "search": "Szukaj",
-    "searchPlaceholder": "Szukaj po nazwie, typie lub tagu"
+    "searchPlaceholder": "Szukaj po nazwie"
   },
   "loading": "Wczytywanie napojów…",
   "error": {
@@ -19,5 +18,9 @@
   },
   "list": {
     "aria": "Lista napojów"
+  },
+  "card": {
+    "brand": "Marka",
+    "brewTime": "Czas parzenia"
   }
 }
