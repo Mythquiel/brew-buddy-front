@@ -1,5 +1,4 @@
 import {Outlet, useLocation} from "react-router-dom";
-import "../style/layout.css";
 import Footer from "../layout/Footer";
 
 export function BaseLayout() {

@@ -1,0 +1,200 @@
+.statsPage {
+  display: grid;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md) 1.25rem var(--spacing-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.statsHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.statsHeader h1 {
+  margin: 0;
+  color: var(--color-green-lightest);
+  font-size: 2rem;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--color-neutral-cool);
+  font-size: 0.95rem;
+}
+
+/* Stats Overview Cards */
+.statsOverview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+}
+
+.statCard {
+  background: rgba(27, 67, 50, 0.25);
+  border: 1px solid rgba(216, 243, 220, 0.15);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  transition: transform var(--transition-normal) ease, border-color var(--transition-normal) ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(149, 213, 178, 0.4);
+}
+
+.statIcon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.statValue {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-green-lighter);
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  color: var(--color-neutral-cool);
+  text-align: center;
+}
+
+/* Stat Sections */
+.statsContent {
+  display: grid;
+  gap: var(--spacing-xl);
+}
+
+.statSection {
+  background: rgba(27, 67, 50, 0.15);
+  border: 1px solid rgba(216, 243, 220, 0.12);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+}
+
+.statSection h2 {
+  margin: 0 0 1.25rem 0;
+  color: var(--color-green-lightest);
+  font-size: 1.5rem;
+}
+
+/* Charts */
+.chart {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.chartRow {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.chartLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.labelText {
+  color: var(--color-green-pale);
+  font-weight: 500;
+}
+
+.labelCount {
+  color: var(--color-green-lighter);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.chartBarWrapper {
+  position: relative;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.chartBar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-green-dark) 0%, var(--color-green-lighter) 100%);
+  border-radius: var(--radius-sm);
+  transition: width 0.6s ease;
+  min-width: 2px;
+}
+
+.chartBarSecondary {
+  background: linear-gradient(90deg, var(--color-green-medium) 0%, var(--color-green-accent) 100%);
+}
+
+/* States */
+.state {
+  padding: 3rem var(--spacing-lg);
+  text-align: center;
+  color: var(--color-neutral-cool);
+}
+
+.stateLoading {
+  font-style: italic;
+}
+
+.stateError {
+  color: #ff6b6b;
+}
+
+.errorMessage {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: var(--radius-md);
+  color: #ffb3b3;
+  font-size: 0.85rem;
+  text-align: left;
+  overflow-x: auto;
+}
+
+.stateEmpty .hint {
+  font-size: 0.9rem;
+  color: #95a5b1;
+  margin-top: var(--spacing-sm);
+}
+
+.hint {
+  font-size: 0.9rem;
+  color: #95a5b1;
+  margin-top: var(--spacing-sm);
+}
+
+/* Responsive */
+@media (min-width: 640px) {
+  .statsPage {
+    padding: var(--spacing-lg) var(--spacing-xl) 3rem;
+  }
+
+  .statsOverview {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .chartRow {
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+  }
+
+  .chartLabel {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+}
