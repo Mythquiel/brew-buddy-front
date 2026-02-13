@@ -174,13 +174,20 @@
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.08));
   display: grid;
   place-items: center;
+  overflow: hidden;
+  position: relative;
+  min-height: 200px;
 }
 
 .beverageCard .thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .beverageCard .thumb .placeholder {
@@ -200,6 +207,16 @@
 }
 
 .beverageCard .type {
+  font-size: 0.85rem;
+  color: var(--color-neutral-slate);
+}
+
+.beverageCard .brand {
+  font-size: 0.85rem;
+  color: var(--color-neutral-slate);
+}
+
+.beverageCard .brewTime {
   font-size: 0.85rem;
   color: var(--color-neutral-slate);
 }
@@ -248,4 +265,154 @@
   font-size: 0.8rem;
   line-height: 1.1;
   white-space: nowrap;
+}
+
+/* Make cards clickable */
+.beverageCard {
+  cursor: pointer;
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modalContent {
+  background: rgba(216, 243, 220, 0.08);
+  border: 1px solid rgba(216, 243, 220, 0.2);
+  border-radius: var(--radius-xl);
+  max-width: 480px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modalClose {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(216, 243, 220, 0.2);
+  color: var(--color-green-pale);
+  width: 2rem;
+  height: 2rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  z-index: 1;
+}
+
+.modalClose:hover {
+  background: rgba(0, 0, 0, 0.7);
+  border-color: rgba(216, 243, 220, 0.35);
+  transform: scale(1.1);
+}
+
+.modalImage {
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.modalImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.modalImagePlaceholder {
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  font-size: 4rem;
+  opacity: 0.6;
+}
+
+.modalDetails {
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.modalName {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--color-green-pale);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(216, 243, 220, 0.15);
+}
+
+.modalField {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: baseline;
+  font-size: 1rem;
+}
+
+.modalLabel {
+  color: var(--color-neutral-slate);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .modalContent {
+    max-height: 90vh;
+  }
+
+  .modalDetails {
+    padding: 1rem;
+  }
+
+  .modalName {
+    font-size: 1.25rem;
+  }
+
+  .modalField {
+    font-size: 0.95rem;
+  }
 }
