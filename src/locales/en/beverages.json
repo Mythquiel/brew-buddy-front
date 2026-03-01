@@ -6,7 +6,12 @@
     "brand": "Brand",
     "anyBrand": "Any brand",
     "search": "Search",
-    "searchPlaceholder": "Search by name"
+    "searchPlaceholder": "Search beverages..."
+  },
+  "types": {
+    "TEA": "Tea",
+    "COFFEE": "Coffee",
+    "OTHER": "Other"
   },
   "loading": "Loading beverages…",
   "error": {
@@ -20,6 +25,12 @@
     "aria": "Beverages list"
   },
   "card": {
+    "brand": "Brand",
+    "brewTime": "Brew time"
+  },
+  "modal": {
+    "close": "Close",
+    "type": "Type",
     "brand": "Brand",
     "brewTime": "Brew time"
   }
