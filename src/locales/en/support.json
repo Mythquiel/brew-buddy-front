@@ -1,0 +1,43 @@
+{
+  "title": "How can we help you?",
+  "subtitle": "Choose an option below and we'll get back to you as soon as possible",
+  "options": {
+    "feature": {
+      "title": "Request a Feature",
+      "description": "Have an idea for a new feature? We'd love to hear it!"
+    },
+    "bug": {
+      "title": "Report a Bug",
+      "description": "Found something that's not working right? Let us know."
+    },
+    "question": {
+      "title": "Ask a Question",
+      "description": "Have a question about Brew Buddy? We're here to help."
+    }
+  },
+  "forms": {
+    "submit": "Send Message",
+    "fields": {
+      "name": "Your Name",
+      "email": "Email Address",
+      "subject": "Subject",
+      "message": "Message"
+    },
+    "feature": {
+      "title": "Request a Feature",
+      "placeholder": "Describe the feature you'd like to see in Brew Buddy..."
+    },
+    "bug": {
+      "title": "Report a Bug",
+      "placeholder": "Please describe the bug you encountered. Include steps to reproduce if possible..."
+    },
+    "question": {
+      "title": "Ask a Question",
+      "placeholder": "What would you like to know about Brew Buddy?"
+    },
+    "success": {
+      "title": "Message Sent!",
+      "message": "Thank you for reaching out. We'll get back to you soon."
+    }
+  }
+}

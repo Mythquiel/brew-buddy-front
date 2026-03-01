@@ -3,7 +3,7 @@ import {BaseLayout} from "../layout/BaseLayout";
 import Home from "../pages/Home";
 import Beverages from "../pages/Beverages";
 import Stats from "../pages/Stats";
-import Contact from "../pages/Contact";
+import Support from "../pages/Support";
 import NavLayout from "../layout/NavLayout";
 import Admin from "../pages/Admin.tsx";
 
@@ -17,7 +17,7 @@ export default function App() {
                 <Route element={<NavLayout/>}>
                     <Route path="drinks" element={<Beverages/>}/>
                     <Route path="stats" element={<Stats/>}/>
-                    <Route path="contact" element={<Contact/>}/>
+                    <Route path="support" element={<Support/>}/>
                 </Route>
             </Route>
         </Routes>

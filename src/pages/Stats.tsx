@@ -97,10 +97,6 @@ export default function Stats() {
                     />
                 )}
             </div>
-
-            <p className="stats-note">
-                {t("note.api")}
-            </p>
         </div>
     );
 }

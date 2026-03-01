@@ -5,8 +5,8 @@ import enCommon from "./locales/en/common.json";
 import plCommon from "./locales/pl/common.json";
 import enBeverages from "./locales/en/beverages.json";
 import plBeverages from "./locales/pl/beverages.json";
-import enContact from "./locales/en/contact.json";
-import plContact from "./locales/pl/contact.json";
+import enSupport from "./locales/en/support.json";
+import plSupport from "./locales/pl/support.json";
 import enHome from "./locales/en/home.json";
 import plHome from "./locales/pl/home.json";
 import enStats from "./locales/en/stats.json";
@@ -21,7 +21,7 @@ i18n
             en: {
                 common: enCommon,
                 beverages: enBeverages,
-                contact: enContact,
+                support: enSupport,
                 home: enHome,
                 stats: enStats,
                 nav: enNav
@@ -29,7 +29,7 @@ i18n
             pl: {
                 common: plCommon,
                 beverages: plBeverages,
-                contact: plContact,
+                support: plSupport,
                 home: plHome,
                 stats: plStats,
                 nav: plNav
@@ -37,7 +37,7 @@ i18n
         },
         lng: "pl",
         fallbackLng: "en",
-        ns: ["common", "beverages", "contact", "home", "stats", "nav"],
+        ns: ["common", "beverages", "support", "home", "stats", "nav"],
         defaultNS: "common",
         interpolation: {
             escapeValue: false,

@@ -1,8 +1,9 @@
 {
   "welcomeMessage": "Zaparzmy coś",
   "login": {
-    "open": "Logowanie",
-    "title": "Logowanie",
+    "open": "Admin",
+    "title": "Panel Administratora",
+    "description": "Zaloguj się, aby zarządzać napojami",
     "username": "Użytkownik",
     "password": "Hasło",
     "showPassword": "Pokaż hasło",

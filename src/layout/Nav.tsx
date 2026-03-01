@@ -18,7 +18,7 @@ export default function Nav() {
             <ul className={styles.menu}>
                 <li><NavLink to="/drinks">{t("beverages")}</NavLink></li>
                 <li><NavLink to="/stats">{t("stats")}</NavLink></li>
-                <li><NavLink to="/contact">{t("contact")}</NavLink></li>
+                <li><NavLink to="/support">{t("support")}</NavLink></li>
                 <li>
                     <a onClick={(e) => { e.preventDefault(); open(); }}>
                         {t("login.open")}

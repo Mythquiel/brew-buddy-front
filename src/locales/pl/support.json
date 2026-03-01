@@ -1,0 +1,43 @@
+{
+  "title": "Jak możemy Ci pomóc?",
+  "subtitle": "Wybierz jedną z opcji poniżej, a skontaktujemy się z Tobą tak szybko, jak to możliwe",
+  "options": {
+    "feature": {
+      "title": "Zaproponuj Funkcję",
+      "description": "Masz pomysł na nową funkcję? Chętnie go poznamy!"
+    },
+    "bug": {
+      "title": "Zgłoś Błąd",
+      "description": "Znalazłeś coś, co nie działa prawidłowo? Daj nam znać."
+    },
+    "question": {
+      "title": "Zadaj Pytanie",
+      "description": "Masz pytanie o Brew Buddy? Jesteśmy tutaj, aby pomóc."
+    }
+  },
+  "forms": {
+    "submit": "Wyślij Wiadomość",
+    "fields": {
+      "name": "Twoje Imię",
+      "email": "Adres Email",
+      "subject": "Temat",
+      "message": "Wiadomość"
+    },
+    "feature": {
+      "title": "Zaproponuj Funkcję",
+      "placeholder": "Opisz funkcję, którą chciałbyś zobaczyć w Brew Buddy..."
+    },
+    "bug": {
+      "title": "Zgłoś Błąd",
+      "placeholder": "Opisz napotkany błąd. Jeśli to możliwe, dodaj kroki do odtworzenia..."
+    },
+    "question": {
+      "title": "Zadaj Pytanie",
+      "placeholder": "Co chciałbyś wiedzieć o Brew Buddy?"
+    },
+    "success": {
+      "title": "Wiadomość Wysłana!",
+      "message": "Dziękujemy za kontakt. Odpowiemy wkrótce."
+    }
+  }
+}

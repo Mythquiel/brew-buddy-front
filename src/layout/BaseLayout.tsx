@@ -1,5 +1,6 @@
 import {Outlet, useLocation} from "react-router-dom";
 import Footer from "../layout/Footer";
+import AIChatBubble from "../components/AIChatBubble";
 
 export function BaseLayout() {
     const { pathname } = useLocation();
@@ -11,6 +12,7 @@ export function BaseLayout() {
         <Outlet />
       </main>
       <Footer />
+      <AIChatBubble />
     </div>
   );
 }

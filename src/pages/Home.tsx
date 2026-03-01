@@ -27,7 +27,7 @@ export default function Home() {
             <div className={styles.homePage}>
                 <img src={brewBuddyLogo} className={`${styles.logo} ${styles.brewBuddy}`} alt="Brew Buddy logo"/>
                 <button type="button" className={styles.homeButton} onClick={goToDrinks}>
-                    {t("welcomeMessage")} 🍵
+                    {t("welcomeMessage")}!
                 </button>
             </div>
         </>
