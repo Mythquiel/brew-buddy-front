@@ -33,5 +33,58 @@
     "type": "Typ",
     "brand": "Marka",
     "brewTime": "Czas parzenia"
+  },
+  "admin": {
+    "title": "Zarządzanie napojami",
+    "backToHome": "Powrót do strony głównej",
+    "addButton": "Dodaj napój",
+    "addModalTitle": "Dodaj napój",
+    "editModalTitle": "Edytuj napój",
+    "filters": {
+      "search": "Szukaj",
+      "searchPlaceholder": "Szukaj po nazwie lub marce...",
+      "type": "Typ",
+      "allTypes": "Wszystkie typy",
+      "showing": "Wyświetlanie {{filtered}} z {{total}} napojów"
+    },
+    "table": {
+      "name": "Nazwa",
+      "type": "Typ",
+      "brand": "Marka",
+      "brewTime": "Czas parzenia",
+      "actions": "Akcje"
+    },
+    "form": {
+      "type": "Typ",
+      "name": "Nazwa",
+      "nameRequired": "Nazwa *",
+      "namePlaceholder": "np. Espresso",
+      "brand": "Marka",
+      "brandPlaceholder": "Opcjonalne",
+      "brewTimeMin": "Min. parzenie (sek)",
+      "brewTimeMinPlaceholder": "np. 120",
+      "brewTimeMax": "Maks. parzenie (sek)",
+      "brewTimeMaxPlaceholder": "np. 180",
+      "image": "Zdjęcie",
+      "imageReplace": "(Wgraj nowe aby zastąpić)",
+      "imagePreviewNew": "Podgląd nowego zdjęcia:",
+      "imagePreviewCurrent": "Aktualne zdjęcie:",
+      "deleteImage": "Usuń zdjęcie",
+      "deleteConfirm": "Usunąć aktualne zdjęcie?",
+      "cancel": "Anuluj",
+      "saving": "Zapisywanie...",
+      "add": "Dodaj",
+      "save": "Zapisz"
+    },
+    "actions": {
+      "edit": "Edytuj",
+      "delete": "Usuń",
+      "deleteConfirm": "Usunąć \"{{name}}\"?"
+    },
+    "messages": {
+      "loading": "Wczytywanie napojów...",
+      "error": "Błąd: {{message}}",
+      "empty": "Nie znaleziono napojów. Dodaj swój pierwszy!"
+    }
   }
 }

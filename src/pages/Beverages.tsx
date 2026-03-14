@@ -1,5 +1,4 @@
 import {useEffect, useMemo, useState} from "react";
-import styles from "../style/beverages.module.css";
 import {useTranslation} from "react-i18next";
 
 interface Beverage {
@@ -47,6 +46,11 @@ export default function Beverages() {
     const [searchText, setSearchText] = useState<string>("");
     const [brandFilter, setBrandFilter] = useState<string>("");
     const [selectedBeverage, setSelectedBeverage] = useState<BeverageWithSignedUrl | null>(null);
+
+    // Debug: Show API URL in console
+    useEffect(() => {
+        console.log('🔗 API Base URL:', baseUrl || '(not configured)');
+    }, [baseUrl]);
 
     const handleImageError = async (beverageId: string, event: React.SyntheticEvent<HTMLImageElement>) => {
         const img = event.currentTarget;
@@ -158,35 +162,38 @@ export default function Beverages() {
     }, [drinks, typeFilter, brandFilter, searchText]);
 
     return (
-        <div className={styles.beveragesPage}>
-            <header className={styles.beveragesHeader}>
-                <form className={styles.filters} onSubmit={(e) => e.preventDefault()}
+        <div className="grid gap-5 pb-8">
+            <header className="flex flex-col gap-2">
+                <form className="mt-1" onSubmit={(e) => e.preventDefault()}
                       aria-label={t("filters.aria", "Filters")}>
-                    <div className={styles.filtersRow}>
-                        <label className={`${styles.filter} ${styles.searchFilter}`}>
-                            <span className={styles.filterLabel}>{t("filters.search", "Search")}</span>
+                    <div className="grid grid-cols-1 sm:grid-cols-[1.3fr_160px_1.5fr] sm:items-end gap-2">
+                        <label className="grid gap-1">
+                            <span className="text-sm text-[var(--color-neutral-slate)]">{t("filters.search", "Search")}</span>
                             <input
                                 type="search"
                                 placeholder={t("filters.searchPlaceholder", "Search by name")}
                                 value={searchText}
                                 onChange={(e) => setSearchText(e.target.value)}
                                 aria-label={t("filters.search", "Search")}
+                                className="w-full px-3 py-2 rounded-[var(--radius-lg)] border border-[rgba(216,243,220,0.18)] bg-black/25 text-[var(--color-green-pale)] appearance-none"
                             />
                         </label>
-                        <label className={styles.filter}>
-                            <span className={styles.filterLabel}>{t("filters.type", "Type")}</span>
+                        <label className="grid gap-1">
+                            <span className="text-sm text-[var(--color-neutral-slate)]">{t("filters.type", "Type")}</span>
                             <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}
-                                    aria-label={t("filters.type", "Type")}>
+                                    aria-label={t("filters.type", "Type")}
+                                    className="w-full px-3 py-2 rounded-[var(--radius-lg)] border border-[rgba(216,243,220,0.18)] bg-black/25 text-[var(--color-green-pale)]">
                                 <option value="">{t("filters.anyType", "Any type")}</option>
                                 {allTypes.map((tVal) => (
                                     <option key={tVal} value={tVal}>{t(`types.${tVal}`, tVal)}</option>
                                 ))}
                             </select>
                         </label>
-                        <label className={styles.filter}>
-                            <span className={styles.filterLabel}>{t("filters.brand", "Brand")}</span>
+                        <label className="grid gap-1">
+                            <span className="text-sm text-[var(--color-neutral-slate)]">{t("filters.brand", "Brand")}</span>
                             <select value={brandFilter} onChange={(e) => setBrandFilter(e.target.value)}
-                                    aria-label={t("filters.brand", "Brand")}>
+                                    aria-label={t("filters.brand", "Brand")}
+                                    className="w-full px-3 py-2 rounded-[var(--radius-lg)] border border-[rgba(216,243,220,0.18)] bg-black/25 text-[var(--color-green-pale)]">
                                 <option value="">{t("filters.anyBrand", "Any brand")}</option>
                                 {allBrands.map((brand) => (
                                     <option key={brand} value={brand}>{brand}</option>
@@ -198,31 +205,31 @@ export default function Beverages() {
             </header>
 
             {loading && (
-                <div className={styles.state} role="status" aria-live="polite">
+                <div className="bg-[rgba(216,243,220,0.04)] border border-[rgba(216,243,220,0.1)] rounded-xl p-4 px-5" role="status" aria-live="polite">
                     {t("loading", "Loading beverages…")}
                 </div>
             )}
 
             {!loading && error && (
-                <div className={`${styles.state} ${styles.stateError}`} role="alert">
+                <div className="bg-[rgba(255,99,132,0.06)] border border-[rgba(255,99,132,0.35)] rounded-xl p-4 px-5" role="alert">
                     <p>{t("error.title", "Could not load beverages.")}</p>
-                    <pre className={styles.errorMessage}>{error}</pre>
+                    <pre className="whitespace-pre-wrap font-mono text-sm mt-2 text-[#ffb3c1]">{error}</pre>
                 </div>
             )}
 
             {!loading && !error && filteredDrinks.length === 0 && (
-                <div className={`${styles.state} ${styles.stateEmpty}`}>
+                <div className="bg-[rgba(216,243,220,0.04)] border border-[rgba(216,243,220,0.1)] rounded-xl p-4 px-5 opacity-90">
                     <p>{t("empty.title", "No beverages found.")}</p>
                     <p className="hint">{t("empty.hint", "Try adjusting filters or add drinks in your backend.")}</p>
                 </div>
             )}
 
             {!loading && !error && filteredDrinks.length > 0 && (
-                <ul className={styles.beveragesGrid} aria-label={t("list.aria", "Beverages list")}>
+                <ul className="list-none grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4 p-0 m-0 sm:gap-[1.1rem] md:gap-5" aria-label={t("list.aria", "Beverages list")}>
                     {filteredDrinks.map((b) => (
                         <li
                             key={b.id}
-                            className={styles.beverageCard}
+                            className="bg-[rgba(216,243,220,0.04)] border border-[rgba(216,243,220,0.1)] rounded-[14px] overflow-hidden flex flex-col transition-all duration-100 ease-[ease] cursor-pointer hover:-translate-y-0.5 hover:shadow-[0_6px_18px_rgba(0,0,0,0.35)] hover:border-[rgba(216,243,220,0.22)]"
                             onClick={() => setSelectedBeverage(b)}
                             role="button"
                             tabIndex={0}
@@ -233,25 +240,26 @@ export default function Beverages() {
                                 }
                             }}
                         >
-                            <div className={styles.thumb} aria-hidden>
+                            <div className="aspect-video bg-gradient-to-b from-black/[0.22] to-black/[0.08] grid place-items-center overflow-hidden relative min-h-[200px]" aria-hidden>
                                 {b.signedImageUrl ? (
                                     <img
                                         src={b.signedImageUrl}
                                         alt={b.name}
                                         loading="lazy"
                                         onError={(e) => handleImageError(b.id, e)}
+                                        className="w-full h-full object-cover object-center block absolute top-0 left-0"
                                     />
                                 ) : (
-                                    <div className={styles.placeholder} aria-hidden>
+                                    <div className="text-[2rem] opacity-80" aria-hidden>
                                         <span role="img" aria-label="drink">
                                             {b.type === "COFFEE" ? "☕" : b.type === "TEA" ? "🍵" : "🥤"}
                                         </span>
                                     </div>
                                 )}
                             </div>
-                            <div className={styles.content}>
-                                <h3 className={styles.name}>{b.name}</h3>
-                                {b.type && <div className={styles.type}>{t(`types.${b.type}`, b.type)}</div>}
+                            <div className="p-[0.85rem] px-4 pb-4 grid gap-[0.35rem]">
+                                <h3 className="m-0 text-[1.05rem]">{b.name}</h3>
+                                {b.type && <div className="text-[0.85rem] text-[var(--color-neutral-slate)]">{t(`types.${b.type}`, b.type)}</div>}
                             </div>
                         </li>
                     ))}
@@ -260,18 +268,18 @@ export default function Beverages() {
 
             {selectedBeverage && (
                 <div
-                    className={styles.modalOverlay}
+                    className="fixed inset-0 bg-black/85 backdrop-blur flex items-center justify-center p-4 z-[1000] animate-[fadeIn_0.2s_ease]"
                     onClick={() => setSelectedBeverage(null)}
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="modal-title"
                 >
                     <div
-                        className={styles.modalContent}
+                        className="bg-[rgba(216,243,220,0.08)] border border-[rgba(216,243,220,0.2)] rounded-xl max-w-[480px] w-full max-h-[85vh] overflow-y-auto relative animate-[slideUp_0.3s_ease]"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
-                            className={styles.modalClose}
+                            className="absolute top-[16px] right-[16px] bg-black/50 border border-[rgba(216,243,220,0.2)] text-[var(--color-green-pale)] w-8 h-8 rounded-md flex items-center justify-center text-2xl leading-none cursor-pointer transition-all duration-100 z-10 hover:bg-black/70 hover:border-[rgba(216,243,220,0.35)] hover:scale-110"
                             onClick={() => setSelectedBeverage(null)}
                             aria-label={t("modal.close", "Close")}
                         >
@@ -279,41 +287,42 @@ export default function Beverages() {
                         </button>
 
                         {selectedBeverage.signedImageUrl ? (
-                            <div className={styles.modalImage}>
+                            <div className="w-full aspect-video overflow-hidden bg-gradient-to-b from-black/30 to-black/10 rounded-t-xl">
                                 <img
                                     src={selectedBeverage.signedImageUrl}
                                     alt={selectedBeverage.name}
                                     onError={(e) => handleImageError(selectedBeverage.id, e)}
+                                    className="w-full h-full object-cover block"
                                 />
                             </div>
                         ) : (
-                            <div className={styles.modalImagePlaceholder}>
+                            <div className="w-full aspect-video flex items-center justify-center bg-gradient-to-b from-black/30 to-black/10 rounded-t-xl text-[4rem] opacity-60">
                                 <span role="img" aria-label="drink">
                                     {selectedBeverage.type === "COFFEE" ? "☕" : selectedBeverage.type === "TEA" ? "🍵" : "🥤"}
                                 </span>
                             </div>
                         )}
 
-                        <div className={styles.modalDetails}>
-                            <h2 id="modal-title" className={styles.modalName}>{selectedBeverage.name}</h2>
+                        <div className="p-6 grid gap-4">
+                            <h2 id="modal-title" className="m-0 text-2xl text-[var(--color-green-pale)] pb-2 border-b border-[rgba(216,243,220,0.15)]">{selectedBeverage.name}</h2>
 
                             {selectedBeverage.type && (
-                                <div className={styles.modalField}>
-                                    <span className={styles.modalLabel}>{t("modal.type", "Type")}:</span>
+                                <div className="grid grid-cols-[auto_1fr] gap-3 items-baseline text-base">
+                                    <span className="text-[var(--color-neutral-slate)] font-medium whitespace-nowrap">{t("modal.type", "Type")}:</span>
                                     <span>{t(`types.${selectedBeverage.type}`, selectedBeverage.type)}</span>
                                 </div>
                             )}
 
                             {selectedBeverage.brand && (
-                                <div className={styles.modalField}>
-                                    <span className={styles.modalLabel}>{t("modal.brand", "Brand")}:</span>
+                                <div className="grid grid-cols-[auto_1fr] gap-3 items-baseline text-base">
+                                    <span className="text-[var(--color-neutral-slate)] font-medium whitespace-nowrap">{t("modal.brand", "Brand")}:</span>
                                     <span>{selectedBeverage.brand}</span>
                                 </div>
                             )}
 
                             {(selectedBeverage.brewTimeMinSec !== undefined || selectedBeverage.brewTimeMaxSec !== undefined) && (
-                                <div className={styles.modalField}>
-                                    <span className={styles.modalLabel}>{t("modal.brewTime", "Brew time")}:</span>
+                                <div className="grid grid-cols-[auto_1fr] gap-3 items-baseline text-base">
+                                    <span className="text-[var(--color-neutral-slate)] font-medium whitespace-nowrap">{t("modal.brewTime", "Brew time")}:</span>
                                     <span>
                                         {selectedBeverage.brewTimeMinSec !== undefined && selectedBeverage.brewTimeMaxSec !== undefined
                                             ? `${Math.floor(selectedBeverage.brewTimeMinSec / 60)}:${(selectedBeverage.brewTimeMinSec % 60).toString().padStart(2, '0')} - ${Math.floor(selectedBeverage.brewTimeMaxSec / 60)}:${(selectedBeverage.brewTimeMaxSec % 60).toString().padStart(2, '0')}`
