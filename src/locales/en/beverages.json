@@ -33,5 +33,58 @@
     "type": "Type",
     "brand": "Brand",
     "brewTime": "Brew time"
+  },
+  "admin": {
+    "title": "Beverage Management",
+    "backToHome": "Back to Home",
+    "addButton": "Add Beverage",
+    "addModalTitle": "Add Beverage",
+    "editModalTitle": "Edit Beverage",
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Search by name or brand...",
+      "type": "Type",
+      "allTypes": "All Types",
+      "showing": "Showing {{filtered}} of {{total}} beverages"
+    },
+    "table": {
+      "name": "Name",
+      "type": "Type",
+      "brand": "Brand",
+      "brewTime": "Brew Time",
+      "actions": "Actions"
+    },
+    "form": {
+      "type": "Type",
+      "name": "Name",
+      "nameRequired": "Name *",
+      "namePlaceholder": "e.g., Espresso",
+      "brand": "Brand",
+      "brandPlaceholder": "Optional",
+      "brewTimeMin": "Min Brew (sec)",
+      "brewTimeMinPlaceholder": "e.g., 120",
+      "brewTimeMax": "Max Brew (sec)",
+      "brewTimeMaxPlaceholder": "e.g., 180",
+      "image": "Image",
+      "imageReplace": "(Upload new to replace)",
+      "imagePreviewNew": "New image preview:",
+      "imagePreviewCurrent": "Current image:",
+      "deleteImage": "Delete Image",
+      "deleteConfirm": "Delete current image?",
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "add": "Add",
+      "save": "Save"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteConfirm": "Delete \"{{name}}\"?"
+    },
+    "messages": {
+      "loading": "Loading beverages...",
+      "error": "Error: {{message}}",
+      "empty": "No beverages found. Add your first one!"
+    }
   }
 }

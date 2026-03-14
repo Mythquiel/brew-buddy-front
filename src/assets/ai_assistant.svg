@@ -1,0 +1,31 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- antena -->
+    <line x1="256" y1="130" x2="256" y2="150" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="256" cy="116" r="10" fill="#FFFFFF"/>
+
+    <!-- filiżanka robot -->
+    <rect x="164" y="160" width="180" height="160" rx="40" fill="#FFFFFF"/>
+
+    <!-- rant -->
+    <rect x="154" y="148" width="200" height="20" rx="10" fill="#FFFFFF"/>
+
+    <!-- ucho -->
+    <path d="M344 212C370 212 386 226 386 244C386 262 370 276 344 276"
+          stroke="#FFFFFF"
+          stroke-width="16"
+          stroke-linecap="round"
+          fill="none"/>
+
+    <!-- oczy -->
+    <circle cx="228" cy="230" r="10" fill="#2F7D57"/>
+    <circle cx="282" cy="230" r="10" fill="#2F7D57"/>
+
+    <!-- uśmiech -->
+    <path d="M228 262C242 278 268 278 282 262"
+          stroke="#2F7D57"
+          stroke-width="7"
+          stroke-linecap="round"
+          fill="none"/>
+
+</svg>
