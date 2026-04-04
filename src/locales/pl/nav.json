@@ -4,6 +4,7 @@
   "home": "Strona główna",
   "beverages": "Napoje",
   "login": {
-    "open": "Admin"
+    "open": "Zaloguj się",
+    "logout": "Wyloguj"
   }
 }

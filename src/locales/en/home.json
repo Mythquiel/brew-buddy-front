@@ -1,9 +1,9 @@
 {
   "welcomeMessage": "Let's get brewing",
   "login": {
-    "open": "Admin",
-    "title": "Admin Login",
-    "description": "Sign in to manage beverages",
+    "open": "Login",
+    "title": "Login",
+    "description": "Sign in to see additional funtionalities",
     "username": "Username",
     "password": "Password",
     "showPassword": "Show password",
@@ -11,6 +11,15 @@
     "cancel": "Cancel",
     "submit": "Sign in",
     "submitting": "Signing in…",
-    "close": "Close"
+    "close": "Close",
+    "switchToRegister": "Don't have an account? Register"
+  },
+  "register": {
+    "switchToLogin": "Already have an account? Login",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "submitting": "Creating account…",
+    "submit": "Create account"
   }
 }

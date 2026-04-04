@@ -47,9 +47,7 @@ export default function Beverages() {
     const [brandFilter, setBrandFilter] = useState<string>("");
     const [selectedBeverage, setSelectedBeverage] = useState<BeverageWithSignedUrl | null>(null);
 
-    // Debug: Show API URL in console
     useEffect(() => {
-        console.log('🔗 API Base URL:', baseUrl || '(not configured)');
     }, [baseUrl]);
 
     const handleImageError = async (beverageId: string, event: React.SyntheticEvent<HTMLImageElement>) => {

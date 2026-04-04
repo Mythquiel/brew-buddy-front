@@ -1,49 +1,40 @@
 import React, {createContext, useCallback, useContext, useMemo, useState} from "react";
-import LoginModal, {type LoginCredentials } from "../components/LoginModal";
-import { useNavigate } from "react-router-dom";
+import LoginModal, {type LoginCredentials, type RegisterCredentials } from "../components/LoginModal";
+import { useAuth } from "./AuthContext";
 
 export type LoginModalContextValue = {
   isOpen: boolean;
   open: () => void;
   close: () => void;
-  setOnSubmit: (handler: (creds: LoginCredentials) => Promise<void> | void) => void;
 };
 
 const LoginModalContext = createContext<LoginModalContextValue | undefined>(undefined);
 
 export function LoginModalProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [submitHandler, setSubmitHandler] = useState<((c: LoginCredentials) => Promise<void> | void) | null>(null);
-  const navigate = useNavigate();
+  const { login, register } = useAuth();
 
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
 
-  const handleSubmit = useCallback(async (creds: LoginCredentials) => {
-    if (submitHandler) {
-      await submitHandler(creds);
-      return;
-    }
-    // Default, simple demo handler. Replace with real auth when available.
-    const { username, password } = creds;
-    if (username === "admin" && password === "admin") {
-      navigate("/admin");
-    } else {
-      alert("Invalid credentials");
-    }
-  }, [navigate, submitHandler]);
+  const handleLogin = useCallback(async (creds: LoginCredentials) => {
+    await login(creds);
+  }, [login]);
+
+  const handleRegister = useCallback(async (creds: RegisterCredentials) => {
+    await register(creds);
+  }, [register]);
 
   const value = useMemo<LoginModalContextValue>(() => ({
     isOpen,
     open,
     close,
-    setOnSubmit: setSubmitHandler,
   }), [isOpen, open, close]);
 
   return (
     <LoginModalContext.Provider value={value}>
       {children}
-      <LoginModal isOpen={isOpen} onClose={close} onSubmit={handleSubmit} />
+      <LoginModal isOpen={isOpen} onClose={close} onLogin={handleLogin} onRegister={handleRegister} />
     </LoginModalContext.Provider>
   );
 }

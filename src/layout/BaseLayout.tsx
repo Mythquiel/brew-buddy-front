@@ -1,10 +1,12 @@
 import {Outlet, useLocation} from "react-router-dom";
 import Footer from "../layout/Footer";
 import AIChatBubble from "../components/AIChatBubble";
+import { useAuth } from "../auth/AuthContext";
 
 export function BaseLayout() {
     const { pathname } = useLocation();
     const isHome = pathname === "/";
+    const { user, isAuthenticated, logout } = useAuth();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -17,7 +19,9 @@ export function BaseLayout() {
         <Outlet />
       </main>
       <Footer />
-      <AIChatBubble />
+        {isAuthenticated ? (
+          <AIChatBubble />
+        ) : null}
     </div>
   );
 }

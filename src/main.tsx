@@ -9,13 +9,16 @@ import "@fontsource/inter/700.css";
 import "./i18n";
 
 import { LoginModalProvider } from "./auth/LoginModalContext";
+import { AuthProvider } from "./auth/AuthContext";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <LoginModalProvider>
-        <App />
-      </LoginModalProvider>
+      <AuthProvider>
+        <LoginModalProvider>
+          <App />
+        </LoginModalProvider>
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>,
 )

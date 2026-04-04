@@ -1,15 +1,22 @@
 import brewBuddyIcon from '../assets/brew_buddy_cup.svg'
-import {NavLink} from "react-router-dom"
+import {NavLink, useNavigate} from "react-router-dom"
 import {useTranslation} from "react-i18next";
 import { useLoginModal } from "../auth/LoginModalContext";
+import { useAuth } from "../auth/AuthContext";
 
 export default function Nav() {
     const {t} = useTranslation(["nav", "home"]);
     const { open } = useLoginModal();
+    const { user, isAuthenticated, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const hoToHome = () => {
+        navigate("/");
+        }
 
     return (
         <nav className="fixed top-0 left-0 w-screen z-[1000] flex items-center justify-between bg-[var(--color-green-dark)] text-[var(--color-green-lightest)] px-6 py-2 h-16 shadow-[0_2px_6px_rgba(0,0,0,0.15)]">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 cursor-pointer" onClick={hoToHome}>
                 <img src={brewBuddyIcon} alt="Brew Buddy icon" className="w-[50px] h-[50px]"/>
                 <h1 className="text-xl font-semibold text-white">Brew Buddy</h1>
             </div>
@@ -27,6 +34,7 @@ export default function Nav() {
                         {t("beverages")}
                     </NavLink>
                 </li>
+                {isAuthenticated ? (
                 <li>
                     <NavLink
                         to="/stats"
@@ -39,6 +47,7 @@ export default function Nav() {
                         {t("stats")}
                     </NavLink>
                 </li>
+                ) : (null)}
                 <li>
                     <NavLink
                         to="/support"
@@ -51,14 +60,37 @@ export default function Nav() {
                         {t("support")}
                     </NavLink>
                 </li>
-                <li>
-                    <a
-                        onClick={(e) => { e.preventDefault(); open(); }}
-                        className="text-[var(--color-green-lightest)] no-underline font-medium transition-colors duration-200 hover:text-[var(--color-green-lighter)] cursor-pointer"
-                    >
-                        {t("login.open")}
-                    </a>
-                </li>
+                {isAuthenticated ? (
+                    <>
+                        <li>
+                            <span className="text-[var(--color-green-lighter)] font-medium">
+                                {user?.username || user?.email}
+                            </span>
+                        </li>
+                        <li>
+                            <a
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    logout();
+                                    navigate('/');
+                                    open();
+                                }}
+                                className="text-[var(--color-green-lightest)] no-underline font-medium transition-colors duration-200 hover:text-[var(--color-green-lighter)] cursor-pointer"
+                            >
+                                {t("login.logout", "Logout")}
+                            </a>
+                        </li>
+                    </>
+                ) : (
+                    <li>
+                        <a
+                            onClick={(e) => { e.preventDefault(); open(); }}
+                            className="text-[var(--color-green-lightest)] no-underline font-medium transition-colors duration-200 hover:text-[var(--color-green-lighter)] cursor-pointer"
+                        >
+                            {t("login.open")}
+                        </a>
+                    </li>
+                )}
             </ul>
         </nav>
     )

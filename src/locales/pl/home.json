@@ -1,9 +1,9 @@
 {
   "welcomeMessage": "Zaparzmy coś",
   "login": {
-    "open": "Admin",
-    "title": "Panel Administratora",
-    "description": "Zaloguj się, aby zarządzać napojami",
+    "open": "Zaloguj się",
+    "title": "Zaloguj się",
+    "description": "Zaloguj się, aby zobaczyć dodatkowe opcje.",
     "username": "Użytkownik",
     "password": "Hasło",
     "showPassword": "Pokaż hasło",
@@ -11,6 +11,15 @@
     "cancel": "Anuluj",
     "submit": "Zaloguj się",
     "submitting": "Logowanie",
-    "close": "Zamknij"
+    "close": "Zamknij",
+    "switchToRegister": "Nie masz jeszcze konta? Zarejestruj się."
+  },
+  "register": {
+    "switchToLogin": "Masz już konto? Zaloguj się.",
+    "email": "E-mail",
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "submitting": "Tworzenie konta...",
+    "submit": "Załóż konto"
   }
 }

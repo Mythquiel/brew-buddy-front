@@ -4,6 +4,7 @@
   "home": "Home",
   "beverages": "Beverages",
   "login": {
-    "open": "Admin"
+    "open": "Login",
+    "logout": "Logout"
   }
 }
