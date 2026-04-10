@@ -6,7 +6,7 @@ import { useAuth } from "../auth/AuthContext";
 export function BaseLayout() {
     const { pathname } = useLocation();
     const isHome = pathname === "/";
-    const { user, isAuthenticated, logout } = useAuth();
+    const { isAuthenticated } = useAuth();
 
   return (
     <div className="min-h-screen flex flex-col">

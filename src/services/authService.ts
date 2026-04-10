@@ -1,6 +1,3 @@
-// Auth Service API Client
-// Integrates with brew-buddy-auth service
-
 const AUTH_SERVICE_URL = import.meta.env.VITE_AUTH_SERVICE_URL || 'http://localhost:8081';
 
 export interface RegisterRequest {
@@ -113,10 +110,22 @@ class AuthService {
     return response.json();
   }
 
-  async logout(): Promise<void> {
-    // Client-side logout - just discard tokens
-    // Server doesn't track sessions (stateless JWT)
-    return Promise.resolve();
+  async logout(accessToken: string, refreshToken: string): Promise<void> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/auth/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ accessToken, refreshToken }),
+      });
+
+      if (!response.ok) {
+        console.error('Logout request failed, but continuing with client-side logout');
+      }
+    } catch (error) {
+      console.error('Logout request failed:', error);
+    }
   }
 }
 

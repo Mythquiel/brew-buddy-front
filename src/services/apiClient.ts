@@ -1,15 +1,7 @@
-// API Client utility for making authenticated requests to brew-buddy-back
-
-/**
- * Get the stored access token from localStorage
- */
 export function getAccessToken(): string | null {
   return localStorage.getItem('brew_buddy_access_token');
 }
 
-/**
- * Create fetch options with Authorization header if token exists
- */
 export function createAuthHeaders(additionalHeaders: Record<string, string> = {}): Record<string, string> {
   const token = getAccessToken();
   const headers: Record<string, string> = {
@@ -24,10 +16,6 @@ export function createAuthHeaders(additionalHeaders: Record<string, string> = {}
   return headers;
 }
 
-/**
- * Make an authenticated fetch request
- * Automatically adds Authorization header with JWT token
- */
 export async function authenticatedFetch(
   url: string,
   options: RequestInit = {}
@@ -40,9 +28,6 @@ export async function authenticatedFetch(
   });
 }
 
-/**
- * Helper for making authenticated GET requests
- */
 export async function authGet<T>(url: string): Promise<T> {
   const response = await authenticatedFetch(url, { method: 'GET' });
 
@@ -53,9 +38,6 @@ export async function authGet<T>(url: string): Promise<T> {
   return response.json();
 }
 
-/**
- * Helper for making authenticated POST requests
- */
 export async function authPost<T>(url: string, data: unknown): Promise<T> {
   const response = await authenticatedFetch(url, {
     method: 'POST',
@@ -69,9 +51,6 @@ export async function authPost<T>(url: string, data: unknown): Promise<T> {
   return response.json();
 }
 
-/**
- * Helper for making authenticated PUT requests
- */
 export async function authPut<T>(url: string, data: unknown): Promise<T> {
   const response = await authenticatedFetch(url, {
     method: 'PUT',
@@ -85,9 +64,6 @@ export async function authPut<T>(url: string, data: unknown): Promise<T> {
   return response.json();
 }
 
-/**
- * Helper for making authenticated PATCH requests
- */
 export async function authPatch<T>(url: string, data: unknown): Promise<T> {
   const response = await authenticatedFetch(url, {
     method: 'PATCH',
@@ -101,9 +77,6 @@ export async function authPatch<T>(url: string, data: unknown): Promise<T> {
   return response.json();
 }
 
-/**
- * Helper for making authenticated DELETE requests
- */
 export async function authDelete(url: string): Promise<void> {
   const response = await authenticatedFetch(url, {
     method: 'DELETE',

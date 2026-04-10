@@ -1,12 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 import aiAssistantIcon from '../assets/ai_assistant.svg';
+import { sendChatMessage } from '../services/aiService';
+import { useTranslation } from "react-i18next";
 
 export default function AIChatBubble() {
     const [isOpen, setIsOpen] = useState(false);
+    const { t } = useTranslation("ai");
     const [messages, setMessages] = useState<Array<{ role: 'user' | 'ai', text: string }>>([
-        { role: 'ai', text: 'Hi! I\'m your Brew Buddy AI assistant. How can I help you today?' }
+        { role: 'ai', text: t("welcomeMessage", "Hi! I\'m your Brew Buddy AI assistant. ☕🍵 How can I help you today?")}
     ]);
     const [inputValue, setInputValue] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -21,18 +25,29 @@ export default function AIChatBubble() {
         setIsOpen(!isOpen);
     };
 
-    const handleSend = (e: React.FormEvent) => {
+    const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (inputValue.trim()) {
-            setMessages([...messages, { role: 'user', text: inputValue }]);
+        if (inputValue.trim() && !isLoading) {
+            const userMessage = inputValue;
+            setMessages([...messages, { role: 'user', text: userMessage }]);
             setInputValue("");
+            setIsLoading(true);
 
-            setTimeout(() => {
+            try {
+                const response = await sendChatMessage(userMessage, true);
                 setMessages(prev => [...prev, {
                     role: 'ai',
-                    text: 'Thanks for your message! This is a placeholder response. Connect me to your AI backend to get real responses.'
+                    text: response.message
                 }]);
-            }, 1000);
+            } catch (error) {
+                console.error('Failed to get AI response:', error);
+                setMessages(prev => [...prev, {
+                    role: 'ai',
+                    text: t("errorMessage", "Sorry, I encountered an error. Please try again! ☕")
+                }]);
+            } finally {
+                setIsLoading(false);
+            }
         }
     };
 
@@ -79,6 +94,20 @@ export default function AIChatBubble() {
                                 </div>
                             </div>
                         ))}
+                        {isLoading && (
+                            <div className="flex gap-2.5">
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1b4332] to-[#2d6a4f] flex items-center justify-center flex-shrink-0 p-0.5">
+                                    <img src={aiAssistantIcon} alt="AI" className="w-full h-full object-contain translate-y-[1px]" />
+                                </div>
+                                <div className="max-w-[75%] px-4 py-3.5 rounded-2xl leading-relaxed bg-chat-message/40 text-[#d8f3dc] border border-[#82a584]/10">
+                                    <div className="flex gap-1">
+                                        <span className="w-2 h-2 bg-[#82a584] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                                        <span className="w-2 h-2 bg-[#82a584] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                                        <span className="w-2 h-2 bg-[#82a584] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                         <div ref={messagesEndRef} />
                     </div>
 
@@ -92,8 +121,8 @@ export default function AIChatBubble() {
                         />
                         <button
                             type="submit"
-                            className="w-13 h-13 rounded-xl bg-gradient-to-br from-[#2d6a4f] to-[#40916c] border-none text-white cursor-pointer flex items-center justify-center disabled:opacity-40"
-                            disabled={!inputValue.trim()}
+                            className="w-13 h-13 rounded-xl bg-gradient-to-br from-[#2d6a4f] to-[#40916c] border-none text-white cursor-pointer flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed"
+                            disabled={!inputValue.trim() || isLoading}
                         >
                             <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>

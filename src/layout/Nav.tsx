@@ -68,6 +68,18 @@ export default function Nav() {
                             </span>
                         </li>
                         <li>
+                            <NavLink
+                                to="/admin"
+                                className={({ isActive }) =>
+                                    `text-[var(--color-green-lightest)] no-underline font-medium transition-colors duration-200 hover:text-[var(--color-green-lighter)] cursor-pointer ${
+                                        isActive ? 'text-[var(--color-green-lighter)] border-b-2 border-[var(--color-green-lighter)] pb-0.5' : ''
+                                    }`
+                                }
+                            >
+                                {t("admin")}
+                            </NavLink>
+                        </li>
+                        <li>
                             <a
                                 onClick={(e) => {
                                     e.preventDefault();
