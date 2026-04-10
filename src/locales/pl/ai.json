@@ -1,4 +1,6 @@
 {
-  "welcomeMessage": "Cześć! Jestem Brew Buddy AI - twój asystent AI. ☕\uD83C\uDF75 Jak mogę Ci dzisiaj pomóc?",
-  "errorMessage": "Przepraszam, napotkałem niespodziewany błąd. Spróbuj ponownie! ☕"
+  "aiTitle": "Asystent AI",
+  "welcomeMessageAI": "Cześć! Jestem Brew Buddy AI - twój asystent AI. ☕\uD83C\uDF75 Jak mogę Ci dzisiaj pomóc?",
+  "errorMessageAI": "Przepraszam, napotkałem niespodziewany błąd. Spróbuj ponownie! ☕",
+  "typeYourMessage": "Zapytaj o cokolowiek..."
 }

@@ -3,6 +3,7 @@
   "support": "Support",
   "home": "Home",
   "beverages": "Beverages",
+  "admin": "Admin",
   "login": {
     "open": "Login",
     "logout": "Logout"

@@ -32,22 +32,60 @@ export default function Stats() {
 
     useEffect(() => {
         fetchStats();
-    }, []); // Only run once on mount
+    }, []);
 
     async function fetchStats() {
         setLoading(true);
         setError(null);
         try {
+            const brewedAfter = new Date(from).toISOString();
+            const brewedBefore = new Date(to + 'T23:59:59').toISOString();
+
             const params = new URLSearchParams({
-                from: from,
-                to: to
+                brewedAfter: brewedAfter,
+                brewedBefore: brewedBefore
             });
-            const response = await fetch(`${baseUrl}/api/v1/usage/beverages?${params}`);
+            const response = await fetch(`${baseUrl}/api/v1/brewLog?${params}&size=1000`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("brew_buddy_access_token")}`
+                }
+            });
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
             }
             const result = await response.json();
-            setData(result);
+            const brewLogs = result.content || [];
+
+            // TODO add endpoint to backend which will return names - no need for additional call
+            const beveragesResponse = await fetch(`${baseUrl}/api/v1/beverages?size=1000`);
+            if (!beveragesResponse.ok) {
+                throw new Error(`Failed to fetch beverages: HTTP ${beveragesResponse.status}`);
+            }
+            const beveragesResult = await beveragesResponse.json();
+            const beverages = beveragesResult.content || [];
+            const beverageMap = new Map(beverages.map((b: any) => [b.id, b.name]));
+
+            // Aggregate brew logs by beverage
+            const aggregated = brewLogs.reduce((acc: any, log: any) => {
+                const id = log.beverageId;
+                const name = beverageMap.get(id) || 'Unknown';
+
+                if (!acc[id]) {
+                    acc[id] = {
+                        beverageId: id,
+                        beverageName: name,
+                        totalCount: 0,
+                        firstUsedAt: log.brewedAt,
+                        lastUsedAt: log.brewedAt
+                    };
+                }
+                acc[id].totalCount++;
+                if (log.brewedAt < acc[id].firstUsedAt) acc[id].firstUsedAt = log.brewedAt;
+                if (log.brewedAt > acc[id].lastUsedAt) acc[id].lastUsedAt = log.brewedAt;
+                return acc;
+            }, {});
+
+            setData(Object.values(aggregated));
         } catch (e: any) {
             setError(e?.message ?? String(e));
             setData(null);

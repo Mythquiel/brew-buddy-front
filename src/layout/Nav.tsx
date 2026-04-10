@@ -63,11 +63,6 @@ export default function Nav() {
                 {isAuthenticated ? (
                     <>
                         <li>
-                            <span className="text-[var(--color-green-lighter)] font-medium">
-                                {user?.username || user?.email}
-                            </span>
-                        </li>
-                        <li>
                             <NavLink
                                 to="/admin"
                                 className={({ isActive }) =>
@@ -91,6 +86,11 @@ export default function Nav() {
                             >
                                 {t("login.logout", "Logout")}
                             </a>
+                        </li>
+                        <li>
+                            <span className="text-[var(--color-green-lighter)] font-medium">
+                                {user?.username || user?.email}
+                            </span>
                         </li>
                     </>
                 ) : (

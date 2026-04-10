@@ -20,6 +20,7 @@
     "firstName": "Imię",
     "lastName": "Nazwisko",
     "submitting": "Tworzenie konta...",
-    "submit": "Załóż konto"
+    "submit": "Załóż konto",
+    "optional": "(opcjonalne)"
   }
 }

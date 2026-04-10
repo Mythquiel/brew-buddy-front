@@ -1,10 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 type SupportOption = 'feature' | 'bug' | 'question' | null;
 
+function useApiBaseUrl() {
+    return useMemo(() => {
+        const fromEnv = import.meta.env.VITE_API_BASE_URL as string | undefined;
+        if (fromEnv && fromEnv.trim().length > 0) {
+            return fromEnv.replace(/\/$/, "");
+        }
+        return "";
+    }, []);
+}
+
 export default function Support() {
     const { t } = useTranslation("support");
+    const baseUrl = useApiBaseUrl();
     const [selectedOption, setSelectedOption] = useState<SupportOption>(null);
     const [formData, setFormData] = useState({
         name: "",
@@ -13,8 +24,9 @@ export default function Support() {
         message: ""
     });
     const [submitted, setSubmitted] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    // Close modal on Escape key
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
             if (e.key === 'Escape' && selectedOption) {
@@ -25,7 +37,6 @@ export default function Support() {
         return () => window.removeEventListener('keydown', handleEscape);
     }, [selectedOption]);
 
-    // Prevent body scroll when modal is open
     useEffect(() => {
         if (selectedOption) {
             document.body.style.overflow = 'hidden';
@@ -40,17 +51,37 @@ export default function Support() {
     const closeModal = () => {
         setSelectedOption(null);
         setSubmitted(false);
+        setError(null);
         setFormData({ name: "", email: "", subject: "", message: "" });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Connect to backend API
-        console.log("Form submitted:", { type: selectedOption, ...formData });
-        setSubmitted(true);
-        setTimeout(() => {
-            closeModal();
-        }, 2500);
+        setSubmitting(true);
+        setError(null);
+
+        try {
+            const response = await fetch(`${baseUrl}/api/v1/support`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            setSubmitted(true);
+            setTimeout(() => {
+                closeModal();
+            }, 2500);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : String(err));
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const handleBackdropClick = (e: React.MouseEvent) => {
@@ -95,6 +126,12 @@ export default function Support() {
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                            {error && (
+                                <div className="px-4 py-3 bg-error-dark/10 border border-error-dark/30 rounded-[10px] text-error-light text-sm">
+                                    {t("forms.error")}: {error}
+                                </div>
+                            )}
+
                             <div className="mb-0">
                                 <label htmlFor="name" className="block text-[0.8125rem] font-medium text-brew-pale mb-1.5 uppercase tracking-wide">{t("forms.fields.name")}</label>
                                 <input
@@ -144,8 +181,12 @@ export default function Support() {
                                 />
                             </div>
 
-                            <button type="submit" className="w-full px-6 py-3 bg-gradient-to-br from-[#2d6a4f] to-[#40916c] border-none rounded-[10px] text-white text-base font-semibold cursor-pointer transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.2)] mt-2 hover:scale-[1.02] hover:shadow-[0_6px_20px_rgba(64,145,108,0.4)] active:scale-100">
-                                {t("forms.submit")}
+                            <button
+                                type="submit"
+                                disabled={submitting}
+                                className="w-full px-6 py-3 bg-gradient-to-br from-[#2d6a4f] to-[#40916c] border-none rounded-[10px] text-white text-base font-semibold cursor-pointer transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.2)] mt-2 hover:not(:disabled):scale-[1.02] hover:not(:disabled):shadow-[0_6px_20px_rgba(64,145,108,0.4)] active:not(:disabled):scale-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {submitting ? t("forms.submitting") : t("forms.submit")}
                             </button>
                         </form>
                     )}

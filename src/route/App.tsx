@@ -10,11 +10,10 @@ import Admin from "../pages/Admin.tsx";
 export default function App() {
     return (
         <Routes>
-            //TODO add authorisation context and protect route to admin from unauthorized users
-            <Route path="admin" element={<Admin/>}/>
             <Route element={<BaseLayout/>}>
                 <Route index element={<Home/>}/>
                 <Route element={<NavLayout/>}>
+                    <Route path="admin" element={<Admin/>}/>
                     <Route path="drinks" element={<Beverages/>}/>
                     <Route path="stats" element={<Stats/>}/>
                     <Route path="support" element={<Support/>}/>

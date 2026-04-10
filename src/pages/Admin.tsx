@@ -1,7 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import Footer from "../layout/Footer";
 
 interface Beverage {
     id: string;
@@ -41,7 +39,6 @@ type SortDirection = 'asc' | 'desc';
 
 export default function Admin() {
     const { t } = useTranslation("beverages");
-    const navigate = useNavigate();
     const baseUrl = useApiBaseUrl();
     const [beverages, setBeverages] = useState<Beverage[]>([]);
     const [loading, setLoading] = useState(true);
@@ -167,7 +164,8 @@ export default function Admin() {
             if (modalMode === 'add') {
                 const response = await fetch(`${baseUrl}/api/v1/beverages`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json',
+                               'Authorization': `Bearer ${localStorage.getItem("brew_buddy_access_token")}` },
                     body: JSON.stringify(payload)
                 });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -175,8 +173,9 @@ export default function Admin() {
                 beverageId = newBeverage.id;
             } else if (modalMode === 'edit' && selectedBeverage) {
                 const response = await fetch(`${baseUrl}/api/v1/beverages/${selectedBeverage.id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem("brew_buddy_access_token")}` },
                     body: JSON.stringify(payload)
                 });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -192,6 +191,9 @@ export default function Admin() {
 
                 const imageResponse = await fetch(`${baseUrl}/api/v1/beverages/${beverageId}/image`, {
                     method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem("brew_buddy_access_token")}`
+                    },
                     body: imageFormData
                 });
                 if (!imageResponse.ok) throw new Error(`Image upload failed: HTTP ${imageResponse.status}`);
@@ -211,7 +213,10 @@ export default function Admin() {
 
         try {
             const response = await fetch(`${baseUrl}/api/v1/beverages/${beverage.id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("brew_buddy_access_token")}`
+                }
             });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             await loadBeverages();
@@ -225,7 +230,10 @@ export default function Admin() {
 
         try {
             const response = await fetch(`${baseUrl}/api/v1/beverages/${selectedBeverage.id}/image`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("brew_buddy_access_token")}`
+                }
             });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             setImagePreview(null);
@@ -425,16 +433,10 @@ export default function Admin() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="grid gap-5 pb-8">
             <section className="animate-[fadeIn_0.4s_ease-out] py-8 px-8 flex-1">
                 <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center gap-4">
-                        <button
-                            onClick={() => navigate("/")}
-                            className="px-4 py-2 bg-black/30 border border-brew-accent/20 rounded-[10px] text-brew-lightest text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-black/40 hover:border-brew-accent/40"
-                        >
-                            ← {t("admin.backToHome")}
-                        </button>
                         <h2 className="text-[1.75rem] font-bold m-0 bg-gradient-to-br from-brew-accent to-brew-lightest [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] bg-clip-text">
                             {t("admin.title")}
                         </h2>
@@ -570,10 +572,8 @@ export default function Admin() {
                         </table>
                     </div>
                 )}
-
                 {renderModal()}
             </section>
-            <Footer />
         </div>
     );
 }

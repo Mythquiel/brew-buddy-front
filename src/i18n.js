@@ -13,6 +13,8 @@ import enStats from "./locales/en/stats.json";
 import plStats from "./locales/pl/stats.json";
 import enNav from "./locales/en/nav.json";
 import plNav from "./locales/pl/nav.json";
+import enAI from "./locales/en/ai.json"
+import plAI from "./locales/pl/ai.json";
 
 i18n
     .use(initReactI18next)
@@ -24,7 +26,8 @@ i18n
                 support: enSupport,
                 home: enHome,
                 stats: enStats,
-                nav: enNav
+                nav: enNav,
+                ai: enAI
             },
             pl: {
                 common: plCommon,
@@ -32,12 +35,13 @@ i18n
                 support: plSupport,
                 home: plHome,
                 stats: plStats,
-                nav: plNav
+                nav: plNav,
+                ai: plAI
             },
         },
         lng: "pl",
         fallbackLng: "en",
-        ns: ["common", "beverages", "support", "home", "stats", "nav"],
+        ns: ["common", "beverages", "support", "home", "stats", "nav", "ai"],
         defaultNS: "common",
         interpolation: {
             escapeValue: false,

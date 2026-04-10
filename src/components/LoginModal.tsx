@@ -154,7 +154,7 @@ export default function LoginModal({ isOpen, onClose, onLogin, onRegister }: Log
 
               <div className="grid grid-cols-2 gap-3">
                 <label className="grid gap-[0.35rem] text-[0.95rem]">
-                  {t("register.firstName", "First Name")}
+                  {t("register.firstName", "First Name")} {t("register.optional", "(optional)")}
                   <input
                     type="text"
                     autoComplete="given-name"
@@ -164,7 +164,7 @@ export default function LoginModal({ isOpen, onClose, onLogin, onRegister }: Log
                   />
                 </label>
                 <label className="grid gap-[0.35rem] text-[0.95rem]">
-                  {t("register.lastName", "Last Name")}
+                  {t("register.lastName", "Last Name")} {t("register.optional", "(optional)")}
                   <input
                     type="text"
                     autoComplete="family-name"

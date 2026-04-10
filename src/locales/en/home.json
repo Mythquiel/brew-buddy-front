@@ -20,6 +20,7 @@
     "firstName": "First Name",
     "lastName": "Last Name",
     "submitting": "Creating account…",
-    "submit": "Create account"
+    "submit": "Create account",
+    "optional": "(optional)"
   }
 }

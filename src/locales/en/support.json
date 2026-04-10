@@ -17,6 +17,8 @@
   },
   "forms": {
     "submit": "Send Message",
+    "submitting": "Sending...",
+    "error": "Failed to send message",
     "fields": {
       "name": "Your Name",
       "email": "Email Address",

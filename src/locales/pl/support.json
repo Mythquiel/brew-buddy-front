@@ -17,6 +17,8 @@
   },
   "forms": {
     "submit": "Wyślij Wiadomość",
+    "submitting": "Wysyłanie...",
+    "error": "Nie udało się wysłać wiadomości",
     "fields": {
       "name": "Twoje Imię",
       "email": "Adres Email",
