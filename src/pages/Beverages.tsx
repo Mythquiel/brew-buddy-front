@@ -1,6 +1,6 @@
 import {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
-import { createOptionalAuthHeaders } from "../services/apiClient";
+import { optionalAuthenticatedFetch } from "../services/apiClient";
 
 interface Beverage {
     id: string;
@@ -60,9 +60,7 @@ export default function Beverages() {
         }
 
         try {
-            const response = await fetch(`${baseUrl}/api/v1/beverages/${beverageId}/image-url`, {
-                headers: createOptionalAuthHeaders()
-            });
+            const response = await optionalAuthenticatedFetch(`${baseUrl}/api/v1/beverages/${beverageId}/image-url`);
             if (response.ok) {
                 const newSignedUrl = await response.text();
                 setDrinks(prevDrinks =>
@@ -101,10 +99,7 @@ export default function Beverages() {
                     data.content.map(async (beverage) => {
                         if (beverage.imageUrl) {
                             try {
-                                const imageResponse = await fetch(
-                                    `${baseUrl}/api/v1/beverages/${beverage.id}/image-url`,
-                                    { headers: createOptionalAuthHeaders() }
-                                );
+                                const imageResponse = await optionalAuthenticatedFetch(`${baseUrl}/api/v1/beverages/${beverage.id}/image-url`);
                                 if (imageResponse.ok) {
                                     const signedUrl = await imageResponse.text();
                                     return { ...beverage, signedImageUrl: signedUrl };

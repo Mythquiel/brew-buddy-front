@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { createOptionalAuthHeaders } from "../services/apiClient";
+import { authenticatedFetch, optionalAuthenticatedFetch } from "../services/apiClient";
 
 interface Beverage {
     id: string;
@@ -69,7 +69,7 @@ export default function Admin() {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`${baseUrl}/api/v1/beverages?size=1000`);
+            const response = await authenticatedFetch(`${baseUrl}/api/v1/beverages?size=1000`);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
             setBeverages(data.content || []);
@@ -106,9 +106,7 @@ export default function Admin() {
 
         // Always try to load current image
         try {
-            const response = await fetch(`${baseUrl}/api/v1/beverages/${beverage.id}/image-url`, {
-                headers: createOptionalAuthHeaders()
-            });
+            const response = await optionalAuthenticatedFetch(`${baseUrl}/api/v1/beverages/${beverage.id}/image-url`);
             if (response.ok) {
                 const signedUrl = await response.text();
                 if (signedUrl && signedUrl.trim().length > 0) {
@@ -165,20 +163,16 @@ export default function Admin() {
             let beverageId: string;
 
             if (modalMode === 'add') {
-                const response = await fetch(`${baseUrl}/api/v1/beverages`, {
+                const response = await authenticatedFetch(`${baseUrl}/api/v1/beverages`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json',
-                               'Authorization': `Bearer ${localStorage.getItem("brew_buddy_access_token")}` },
                     body: JSON.stringify(payload)
                 });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const newBeverage = await response.json();
                 beverageId = newBeverage.id;
             } else if (modalMode === 'edit' && selectedBeverage) {
-                const response = await fetch(`${baseUrl}/api/v1/beverages/${selectedBeverage.id}`, {
+                const response = await authenticatedFetch(`${baseUrl}/api/v1/beverages/${selectedBeverage.id}`, {
                     method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem("brew_buddy_access_token")}` },
                     body: JSON.stringify(payload)
                 });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -192,11 +186,8 @@ export default function Admin() {
                 const imageFormData = new FormData();
                 imageFormData.append('image', formData.imageFile);
 
-                const imageResponse = await fetch(`${baseUrl}/api/v1/beverages/${beverageId}/image`, {
+                const imageResponse = await authenticatedFetch(`${baseUrl}/api/v1/beverages/${beverageId}/image`, {
                     method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem("brew_buddy_access_token")}`
-                    },
                     body: imageFormData
                 });
                 if (!imageResponse.ok) throw new Error(`Image upload failed: HTTP ${imageResponse.status}`);
@@ -215,11 +206,8 @@ export default function Admin() {
         if (!confirm(t("admin.actions.deleteConfirm", { name: beverage.name }))) return;
 
         try {
-            const response = await fetch(`${baseUrl}/api/v1/beverages/${beverage.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("brew_buddy_access_token")}`
-                }
+            const response = await authenticatedFetch(`${baseUrl}/api/v1/beverages/${beverage.id}`, {
+                method: 'DELETE'
             });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             await loadBeverages();
@@ -232,11 +220,8 @@ export default function Admin() {
         if (!selectedBeverage?.id || !confirm(t("admin.form.deleteConfirm"))) return;
 
         try {
-            const response = await fetch(`${baseUrl}/api/v1/beverages/${selectedBeverage.id}/image`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("brew_buddy_access_token")}`
-                }
+            const response = await authenticatedFetch(`${baseUrl}/api/v1/beverages/${selectedBeverage.id}/image`, {
+                method: 'DELETE'
             });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             setImagePreview(null);

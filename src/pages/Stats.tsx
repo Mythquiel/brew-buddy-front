@@ -1,6 +1,6 @@
 import {useEffect, useState, useMemo} from "react";
 import {useTranslation} from "react-i18next";
-import { createAuthHeaders } from "../services/apiClient";
+import { authenticatedFetch } from "../services/apiClient";
 
 interface BeverageUsage {
     beverageId: string;
@@ -46,9 +46,7 @@ export default function Stats() {
                 brewedAfter: brewedAfter,
                 brewedBefore: brewedBefore
             });
-            const response = await fetch(`${baseUrl}/api/v1/brewLog?${params}&size=1000`, {
-                headers: createAuthHeaders()
-            });
+            const response = await authenticatedFetch(`${baseUrl}/api/v1/brewLog?${params}&size=1000`);
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
             }
@@ -56,7 +54,7 @@ export default function Stats() {
             const brewLogs = result.content || [];
 
             // TODO add endpoint to backend which will return names - no need for additional call
-            const beveragesResponse = await fetch(`${baseUrl}/api/v1/beverages?size=1000`);
+            const beveragesResponse = await authenticatedFetch(`${baseUrl}/api/v1/beverages?size=1000`);
             if (!beveragesResponse.ok) {
                 throw new Error(`Failed to fetch beverages: HTTP ${beveragesResponse.status}`);
             }
