@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { createOptionalAuthHeaders } from "../services/apiClient";
 
 interface Beverage {
     id: string;
@@ -105,7 +106,9 @@ export default function Admin() {
 
         // Always try to load current image
         try {
-            const response = await fetch(`${baseUrl}/api/v1/beverages/${beverage.id}/image-url`);
+            const response = await fetch(`${baseUrl}/api/v1/beverages/${beverage.id}/image-url`, {
+                headers: createOptionalAuthHeaders()
+            });
             if (response.ok) {
                 const signedUrl = await response.text();
                 if (signedUrl && signedUrl.trim().length > 0) {

@@ -2,6 +2,19 @@ export function getAccessToken(): string | null {
   return localStorage.getItem('brew_buddy_access_token');
 }
 
+export function createOptionalAuthHeaders(additionalHeaders: Record<string, string> = {}): Record<string, string> {
+  const token = getAccessToken();
+  const headers: Record<string, string> = {
+    ...additionalHeaders,
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  return headers;
+}
+
 export function createAuthHeaders(additionalHeaders: Record<string, string> = {}): Record<string, string> {
   const token = getAccessToken();
   const headers: Record<string, string> = {

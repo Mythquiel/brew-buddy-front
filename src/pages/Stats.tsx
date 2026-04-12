@@ -1,5 +1,6 @@
 import {useEffect, useState, useMemo} from "react";
 import {useTranslation} from "react-i18next";
+import { createAuthHeaders } from "../services/apiClient";
 
 interface BeverageUsage {
     beverageId: string;
@@ -46,9 +47,7 @@ export default function Stats() {
                 brewedBefore: brewedBefore
             });
             const response = await fetch(`${baseUrl}/api/v1/brewLog?${params}&size=1000`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("brew_buddy_access_token")}`
-                }
+                headers: createAuthHeaders()
             });
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
