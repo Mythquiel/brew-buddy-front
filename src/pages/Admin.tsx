@@ -104,7 +104,14 @@ export default function Admin() {
             imageFile: null
         });
 
-        // Always try to load current image
+        if (!beverage.imageUrl) {
+            setImagePreview(null);
+            setSelectedBeverage(beverage);
+            setModalMode('edit');
+            return;
+        }
+
+        // Load current image only when the beverage has an image path.
         try {
             const response = await optionalAuthenticatedFetch(`${baseUrl}/api/v1/beverages/${beverage.id}/image-url`);
             if (response.ok) {
