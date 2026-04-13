@@ -71,9 +71,11 @@ export default function Beverages() {
                     )
                 );
                 img.dataset.retryCount = String((parseInt(img.dataset.retryCount || '0') + 1));
+            } else if (response.status !== 403 && response.status !== 404) {
+                console.warn(`Failed to refresh signed URL for ${beverageId}: HTTP ${response.status}`);
             }
         } catch (err) {
-            console.error(`Failed to refresh signed URL for ${beverageId}:`, err);
+            console.warn(`Failed to refresh signed URL for ${beverageId}:`, err);
         }
     };
 
@@ -106,7 +108,9 @@ export default function Beverages() {
                         const imageResponse = await optionalAuthenticatedFetch(`${baseUrl}/api/v1/beverages/${beverage.id}/image-url`);
 
                         if (!imageResponse.ok) {
-                            console.error(`Failed to fetch image for ${beverage.name}: HTTP ${imageResponse.status}`);
+                            if (imageResponse.status !== 403 && imageResponse.status !== 404) {
+                                console.warn(`Failed to fetch image for ${beverage.name}: HTTP ${imageResponse.status}`);
+                            }
                             return;
                         }
 
@@ -119,7 +123,7 @@ export default function Beverages() {
                             )
                         );
                     } catch (err) {
-                        console.error(`Failed to fetch image for ${beverage.name}:`, err);
+                        console.warn(`Failed to fetch image for ${beverage.name}:`, err);
                     }
                 });
             } catch (err) {

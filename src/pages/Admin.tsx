@@ -118,9 +118,12 @@ export default function Admin() {
                 }
             } else {
                 setImagePreview(null);
+                if (response.status !== 403 && response.status !== 404) {
+                    console.warn(`Failed to load current image: HTTP ${response.status}`);
+                }
             }
         } catch (err) {
-            console.error('Failed to load current image:', err);
+            console.warn('Failed to load current image:', err);
             setImagePreview(null);
         }
 
