@@ -69,7 +69,7 @@ export default function Admin() {
         setLoading(true);
         setError(null);
         try {
-            const response = await authenticatedFetch(`${baseUrl}/api/v1/beverages?size=1000`);
+            const response = await optionalAuthenticatedFetch(`${baseUrl}/api/v1/beverages?size=1000`);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
             setBeverages(data.content || []);

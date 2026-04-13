@@ -95,24 +95,33 @@ export default function Beverages() {
 
                 const data: BeveragePageResponse = await response.json();
 
-                const beveragesWithImages = await Promise.all(
-                    data.content.map(async (beverage) => {
-                        if (beverage.imageUrl) {
-                            try {
-                                const imageResponse = await optionalAuthenticatedFetch(`${baseUrl}/api/v1/beverages/${beverage.id}/image-url`);
-                                if (imageResponse.ok) {
-                                    const signedUrl = await imageResponse.text();
-                                    return { ...beverage, signedImageUrl: signedUrl };
-                                }
-                            } catch (err) {
-                                console.error(`Failed to fetch image for ${beverage.name}:`, err);
-                            }
-                        }
-                        return beverage;
-                    })
-                );
+                setDrinks(data.content);
 
-                setDrinks(beveragesWithImages);
+                data.content.forEach(async (beverage) => {
+                    if (!beverage.imageUrl) {
+                        return;
+                    }
+
+                    try {
+                        const imageResponse = await optionalAuthenticatedFetch(`${baseUrl}/api/v1/beverages/${beverage.id}/image-url`);
+
+                        if (!imageResponse.ok) {
+                            console.error(`Failed to fetch image for ${beverage.name}: HTTP ${imageResponse.status}`);
+                            return;
+                        }
+
+                        const signedUrl = await imageResponse.text();
+                        setDrinks(prevDrinks =>
+                            prevDrinks.map(drink =>
+                                drink.id === beverage.id
+                                    ? { ...drink, signedImageUrl: signedUrl }
+                                    : drink
+                            )
+                        );
+                    } catch (err) {
+                        console.error(`Failed to fetch image for ${beverage.name}:`, err);
+                    }
+                });
             } catch (err) {
                 setError(err instanceof Error ? err.message : String(err));
                 setDrinks([]);

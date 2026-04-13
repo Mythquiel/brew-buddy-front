@@ -148,7 +148,22 @@ export async function optionalAuthenticatedFetch(
   url: string,
   options: RequestInit = {}
 ): Promise<Response> {
-  const headers = await createRequestHeaders(options, false);
+  const headers = toHeadersObject(options.headers);
+  const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+
+  if (options.body && !(options.body instanceof FormData)) {
+    const hasContentType = Object.keys(headers).some(
+      (header) => header.toLowerCase() === 'content-type'
+    );
+
+    if (!hasContentType) {
+      headers['Content-Type'] = 'application/json';
+    }
+  }
+
+  if (token && !isTokenExpired(token)) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
 
   return fetch(url, {
     ...options,
