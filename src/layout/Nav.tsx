@@ -8,6 +8,7 @@ export default function Nav() {
     const {t} = useTranslation(["nav", "home"]);
     const { open } = useLoginModal();
     const { user, isAuthenticated, logout } = useAuth();
+    const isAdmin = user?.roles?.some((role) => role === "ADMIN" || role === "ROLE_ADMIN") ?? false;
     const navigate = useNavigate();
 
     const hoToHome = () => {
@@ -62,18 +63,20 @@ export default function Nav() {
                 </li>
                 {isAuthenticated ? (
                     <>
-                        <li>
-                            <NavLink
-                                to="/admin"
-                                className={({ isActive }) =>
-                                    `text-[var(--color-green-lightest)] no-underline font-medium transition-colors duration-200 hover:text-[var(--color-green-lighter)] cursor-pointer ${
-                                        isActive ? 'text-[var(--color-green-lighter)] border-b-2 border-[var(--color-green-lighter)] pb-0.5' : ''
-                                    }`
-                                }
-                            >
-                                {t("admin")}
-                            </NavLink>
-                        </li>
+                        {isAdmin ? (
+                            <li>
+                                <NavLink
+                                    to="/admin"
+                                    className={({ isActive }) =>
+                                        `text-[var(--color-green-lightest)] no-underline font-medium transition-colors duration-200 hover:text-[var(--color-green-lighter)] cursor-pointer ${
+                                            isActive ? 'text-[var(--color-green-lighter)] border-b-2 border-[var(--color-green-lighter)] pb-0.5' : ''
+                                        }`
+                                    }
+                                >
+                                    {t("admin")}
+                                </NavLink>
+                            </li>
+                        ) : null}
                         <li>
                             <a
                                 onClick={(e) => {
