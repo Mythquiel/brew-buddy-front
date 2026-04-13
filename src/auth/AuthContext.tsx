@@ -108,6 +108,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const storedAccessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
     const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
 
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+
+    setAccessToken(null);
+    setUser(null);
+
     if (storedAccessToken && storedRefreshToken) {
       try {
         await authService.logout(storedAccessToken, storedRefreshToken);
@@ -115,13 +122,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.error('Server logout failed, continuing with client logout:', error);
       }
     }
-
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
-
-    setAccessToken(null);
-    setUser(null);
   }, []);
 
   const refreshToken = useCallback(async () => {
