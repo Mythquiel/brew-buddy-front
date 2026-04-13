@@ -116,15 +116,16 @@ class AuthService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ accessToken, refreshToken }),
       });
 
       if (!response.ok) {
-        console.error('Logout request failed, but continuing with client-side logout');
+        console.warn(`Logout request failed with HTTP ${response.status}; continuing with client-side logout`);
       }
     } catch (error) {
-      console.error('Logout request failed:', error);
+      console.warn('Logout request failed; continuing with client-side logout:', error);
     }
   }
 }
