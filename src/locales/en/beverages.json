@@ -34,6 +34,12 @@
     "brand": "Brand",
     "brewTime": "Brew time"
   },
+  "time": {
+    "minute_one": "minute",
+    "minute_other": "minutes",
+    "second_one": "second",
+    "second_other": "seconds"
+  },
   "admin": {
     "title": "Beverage Management",
     "backToHome": "Back to Home",

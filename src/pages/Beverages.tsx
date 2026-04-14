@@ -1,4 +1,5 @@
 import {useEffect, useMemo, useState} from "react";
+import type {TFunction} from "i18next";
 import {useTranslation} from "react-i18next";
 import { optionalAuthenticatedFetch } from "../services/apiClient";
 
@@ -26,6 +27,45 @@ interface BeveragePageResponse {
     number: number;
 }
 
+function formatBrewTime(t: TFunction<"beverages">, language: string, minSec?: number, maxSec?: number) {
+    if (minSec === undefined && maxSec === undefined) {
+        return "";
+    }
+
+    const formatValue = (seconds: number, unit: "second" | "minute") => {
+        if (unit === "second") {
+            return new Intl.NumberFormat(language, {maximumFractionDigits: 0}).format(seconds);
+        }
+
+        const minutes = seconds / 60;
+        return new Intl.NumberFormat(language, {maximumFractionDigits: 1}).format(minutes);
+    };
+
+    const formatUnit = (unit: "second" | "minute", count: number) => {
+        return t(`time.${unit}`, {count});
+    };
+
+    const formatSingle = (seconds: number) => {
+        const unit = seconds >= 60 ? "minute" : "second";
+        const value = formatValue(seconds, unit);
+        return `${value} ${formatUnit(unit, seconds / (unit === "minute" ? 60 : 1))}`;
+    };
+
+    if (minSec === undefined) {
+        return formatSingle(maxSec!);
+    }
+
+    if (maxSec === undefined || minSec === maxSec) {
+        return formatSingle(minSec);
+    }
+
+    const unit = minSec >= 60 && maxSec >= 60 ? "minute" : "second";
+    const min = formatValue(minSec, unit);
+    const max = formatValue(maxSec, unit);
+
+    return `${min}-${max} ${formatUnit(unit, maxSec / (unit === "minute" ? 60 : 1))}`;
+}
+
 function useApiBaseUrl() {
     return useMemo(() => {
         const fromEnv = import.meta.env.VITE_API_BASE_URL as string | undefined;
@@ -38,7 +78,7 @@ function useApiBaseUrl() {
 }
 
 export default function Beverages() {
-    const {t} = useTranslation("beverages");
+    const {t, i18n} = useTranslation("beverages");
     const baseUrl = useApiBaseUrl();
     const [drinks, setDrinks] = useState<BeverageWithSignedUrl[]>([]);
     const [loading, setLoading] = useState(true);
@@ -333,14 +373,7 @@ export default function Beverages() {
                             {(selectedBeverage.brewTimeMinSec !== undefined || selectedBeverage.brewTimeMaxSec !== undefined) && (
                                 <div className="grid grid-cols-[auto_1fr] gap-3 items-baseline text-base">
                                     <span className="text-[var(--color-neutral-slate)] font-medium whitespace-nowrap">{t("modal.brewTime", "Brew time")}:</span>
-                                    <span>
-                                        {selectedBeverage.brewTimeMinSec !== undefined && selectedBeverage.brewTimeMaxSec !== undefined
-                                            ? `${Math.floor(selectedBeverage.brewTimeMinSec / 60)}:${(selectedBeverage.brewTimeMinSec % 60).toString().padStart(2, '0')} - ${Math.floor(selectedBeverage.brewTimeMaxSec / 60)}:${(selectedBeverage.brewTimeMaxSec % 60).toString().padStart(2, '0')}`
-                                            : selectedBeverage.brewTimeMinSec !== undefined
-                                            ? `${Math.floor(selectedBeverage.brewTimeMinSec / 60)}:${(selectedBeverage.brewTimeMinSec % 60).toString().padStart(2, '0')}`
-                                            : `${Math.floor(selectedBeverage.brewTimeMaxSec! / 60)}:${(selectedBeverage.brewTimeMaxSec! % 60).toString().padStart(2, '0')}`
-                                        }
-                                    </span>
+                                    <span>{formatBrewTime(t, i18n.language, selectedBeverage.brewTimeMinSec, selectedBeverage.brewTimeMaxSec)}</span>
                                 </div>
                             )}
                         </div>

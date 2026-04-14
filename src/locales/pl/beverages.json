@@ -34,6 +34,16 @@
     "brand": "Marka",
     "brewTime": "Czas parzenia"
   },
+  "time": {
+    "minute_one": "minuta",
+    "minute_few": "minuty",
+    "minute_many": "minut",
+    "minute_other": "minuty",
+    "second_one": "sekunda",
+    "second_few": "sekundy",
+    "second_many": "sekund",
+    "second_other": "sekundy"
+  },
   "admin": {
     "title": "Zarządzanie napojami",
     "backToHome": "Powrót do strony głównej",
